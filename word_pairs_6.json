@@ -1,0 +1,502 @@
+[
+  {
+    "start_word": "girsle",
+    "end_word": "darnex",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "welter",
+    "end_word": "chafer",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "cowdie",
+    "end_word": "pinner",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "plated",
+    "end_word": "fallen",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "bulker",
+    "end_word": "cantor",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "dowset",
+    "end_word": "winger",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "tarnal",
+    "end_word": "pontil",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "tabled",
+    "end_word": "metier",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "hanced",
+    "end_word": "cullet",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "jammer",
+    "end_word": "dayman",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "beamed",
+    "end_word": "jobber",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "turfed",
+    "end_word": "becket",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "oillet",
+    "end_word": "lanket",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "tittle",
+    "end_word": "willet",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "guglet",
+    "end_word": "fanged",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "barger",
+    "end_word": "porule",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "proper",
+    "end_word": "tercet",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "parian",
+    "end_word": "syrian",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "mindel",
+    "end_word": "dudley",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "milner",
+    "end_word": "dufter",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "mammer",
+    "end_word": "sacken",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "hobber",
+    "end_word": "housel",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "seiner",
+    "end_word": "mallee",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "birkie",
+    "end_word": "dankly",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "muffed",
+    "end_word": "burker",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "lammer",
+    "end_word": "samuel",
+    "optimal_steps": 3
+  },
+  {
+    "start_word": "bosket",
+    "end_word": "nerver",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "cunjer",
+    "end_word": "nather",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "bicker",
+    "end_word": "heaper",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "tinguy",
+    "end_word": "seared",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "jadder",
+    "end_word": "german",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "dickey",
+    "end_word": "topped",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "cocked",
+    "end_word": "talker",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "player",
+    "end_word": "voidee",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "rucker",
+    "end_word": "beamer",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "folden",
+    "end_word": "gelder",
+    "optimal_steps": 3
+  },
+  {
+    "start_word": "fanner",
+    "end_word": "cardia",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "necker",
+    "end_word": "balder",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "mining",
+    "end_word": "cerote",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "ternal",
+    "end_word": "weanel",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "linker",
+    "end_word": "termes",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "partan",
+    "end_word": "porket",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "collin",
+    "end_word": "kettle",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "bedlar",
+    "end_word": "matted",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "hotter",
+    "end_word": "cuddly",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "teeter",
+    "end_word": "guider",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "unrule",
+    "end_word": "uptill",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "wilder",
+    "end_word": "zoster",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "lippen",
+    "end_word": "vendor",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "parsec",
+    "end_word": "seamer",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "togate",
+    "end_word": "scribe",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "jilter",
+    "end_word": "silker",
+    "optimal_steps": 3
+  },
+  {
+    "start_word": "sabine",
+    "end_word": "reburn",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "derris",
+    "end_word": "carmen",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "passen",
+    "end_word": "boston",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "hallah",
+    "end_word": "spiked",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "canton",
+    "end_word": "pullet",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "bicker",
+    "end_word": "lapped",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "nipper",
+    "end_word": "parian",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "hander",
+    "end_word": "jacker",
+    "optimal_steps": 3
+  },
+  {
+    "start_word": "tetter",
+    "end_word": "tingis",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "moiles",
+    "end_word": "wicked",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "sullow",
+    "end_word": "wallet",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "branny",
+    "end_word": "henter",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "dingle",
+    "end_word": "weldor",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "unsunk",
+    "end_word": "gating",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "cabler",
+    "end_word": "tackey",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "cupper",
+    "end_word": "colmar",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "sorrel",
+    "end_word": "fonted",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "scrimp",
+    "end_word": "rapine",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "dudler",
+    "end_word": "tonsor",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "suttle",
+    "end_word": "bodied",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "bander",
+    "end_word": "kennel",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "cogman",
+    "end_word": "mummer",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "vendue",
+    "end_word": "differ",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "banked",
+    "end_word": "meaner",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "busser",
+    "end_word": "nipple",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "tining",
+    "end_word": "casino",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "horner",
+    "end_word": "pungey",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "peeper",
+    "end_word": "townet",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "meller",
+    "end_word": "darien",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "hassel",
+    "end_word": "pariah",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "barber",
+    "end_word": "marmot",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "burker",
+    "end_word": "gifted",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "dentel",
+    "end_word": "faster",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "batter",
+    "end_word": "singly",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "norman",
+    "end_word": "hiller",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "tautly",
+    "end_word": "tenter",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "bandle",
+    "end_word": "wuther",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "barren",
+    "end_word": "gypper",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "prayer",
+    "end_word": "dexter",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "shevel",
+    "end_word": "tender",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "towhee",
+    "end_word": "jillet",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "selena",
+    "end_word": "betire",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "metier",
+    "end_word": "cornet",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "tarboy",
+    "end_word": "copied",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "sacrad",
+    "end_word": "fencer",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "weaser",
+    "end_word": "pillar",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "wombed",
+    "end_word": "simmer",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "leaver",
+    "end_word": "reeder",
+    "optimal_steps": 3
+  }
+]

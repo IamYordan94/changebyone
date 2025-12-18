@@ -1,0 +1,502 @@
+[
+  {
+    "start_word": "placket",
+    "end_word": "frisket",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "klicket",
+    "end_word": "classed",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "waddler",
+    "end_word": "bandlet",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "gritter",
+    "end_word": "vaulter",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "yelling",
+    "end_word": "sitting",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "flagger",
+    "end_word": "blacker",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "brimmed",
+    "end_word": "grummel",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "booting",
+    "end_word": "groping",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "flasker",
+    "end_word": "staiver",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "klister",
+    "end_word": "sputter",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "trapper",
+    "end_word": "swotter",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "penning",
+    "end_word": "belling",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "foozler",
+    "end_word": "glutter",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "fasting",
+    "end_word": "lathing",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "chaffer",
+    "end_word": "triolet",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "unwiped",
+    "end_word": "unboned",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "sordino",
+    "end_word": "moiling",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "webster",
+    "end_word": "smotter",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "nooning",
+    "end_word": "fatling",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "totting",
+    "end_word": "silting",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "nearish",
+    "end_word": "darkish",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "berther",
+    "end_word": "smutter",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "clutter",
+    "end_word": "glasses",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "cutling",
+    "end_word": "tilaite",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "knopper",
+    "end_word": "swiller",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "starnel",
+    "end_word": "shankar",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "sistine",
+    "end_word": "elapine",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "spieler",
+    "end_word": "swanker",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "swither",
+    "end_word": "painter",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "moiling",
+    "end_word": "calcine",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "shutter",
+    "end_word": "snicker",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "dreamer",
+    "end_word": "flinder",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "plaster",
+    "end_word": "blacken",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "sliding",
+    "end_word": "moaning",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "teicher",
+    "end_word": "werther",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "swabble",
+    "end_word": "whammle",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "hornist",
+    "end_word": "hookish",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "hittite",
+    "end_word": "larking",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "peaking",
+    "end_word": "carping",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "seaming",
+    "end_word": "seeking",
+    "optimal_steps": 2
+  },
+  {
+    "start_word": "scriber",
+    "end_word": "shimper",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "spinner",
+    "end_word": "blattid",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "penning",
+    "end_word": "refling",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "herding",
+    "end_word": "gauging",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "tracked",
+    "end_word": "swooper",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "trommel",
+    "end_word": "stubbed",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "fulling",
+    "end_word": "gasping",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "plastin",
+    "end_word": "clasper",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "flashet",
+    "end_word": "spelder",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "swisher",
+    "end_word": "wrapper",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "collins",
+    "end_word": "betting",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "whutter",
+    "end_word": "spaniel",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "stuffer",
+    "end_word": "snooker",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "testing",
+    "end_word": "holding",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "folding",
+    "end_word": "milvine",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "cradler",
+    "end_word": "blinter",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "trapper",
+    "end_word": "claiver",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "padding",
+    "end_word": "nagging",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "corking",
+    "end_word": "banging",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "nerving",
+    "end_word": "perking",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "penning",
+    "end_word": "staging",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "sainted",
+    "end_word": "alister",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "blinded",
+    "end_word": "scolder",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "flouter",
+    "end_word": "snapper",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "spicket",
+    "end_word": "brender",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "nipping",
+    "end_word": "potting",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "plunger",
+    "end_word": "flocker",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "chopper",
+    "end_word": "snickey",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "smelled",
+    "end_word": "charger",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "godlike",
+    "end_word": "darling",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "stallar",
+    "end_word": "plumlet",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "trooper",
+    "end_word": "glossed",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "slocken",
+    "end_word": "chunner",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "knopper",
+    "end_word": "wabster",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "blusher",
+    "end_word": "pronger",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "swanner",
+    "end_word": "sheller",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "raisiny",
+    "end_word": "washing",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "figging",
+    "end_word": "heading",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "herring",
+    "end_word": "fackins",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "wobster",
+    "end_word": "skither",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "yanking",
+    "end_word": "harmine",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "karling",
+    "end_word": "fitting",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "franker",
+    "end_word": "chunner",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "chester",
+    "end_word": "slinker",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "yorkist",
+    "end_word": "gullish",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "scamler",
+    "end_word": "gripper",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "clamber",
+    "end_word": "specter",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "dotting",
+    "end_word": "curbing",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "wording",
+    "end_word": "spaying",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "bridged",
+    "end_word": "whisper",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "toiling",
+    "end_word": "melting",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "clinker",
+    "end_word": "sweller",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "shudder",
+    "end_word": "slodger",
+    "optimal_steps": 3
+  },
+  {
+    "start_word": "tricker",
+    "end_word": "flouter",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "waister",
+    "end_word": "plaited",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "bounded",
+    "end_word": "snagger",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "brooked",
+    "end_word": "granger",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "earring",
+    "end_word": "mooring",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "tillite",
+    "end_word": "pigling",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "skating",
+    "end_word": "rodlike",
+    "optimal_steps": 8
+  }
+]

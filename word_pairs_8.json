@@ -1,0 +1,252 @@
+[
+  {
+    "start_word": "unbarren",
+    "end_word": "unharmed",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "undashed",
+    "end_word": "untailed",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "unhunted",
+    "end_word": "untested",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "wormless",
+    "end_word": "caseless",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "overdear",
+    "end_word": "overtire",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "unhoused",
+    "end_word": "unbigged",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "unchased",
+    "end_word": "unhedged",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "unwaited",
+    "end_word": "unfluted",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "unrolled",
+    "end_word": "unwelded",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "untended",
+    "end_word": "unplacid",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "bleached",
+    "end_word": "plancher",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "unslated",
+    "end_word": "unjudged",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "unrioted",
+    "end_word": "unwalked",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "reefable",
+    "end_word": "mendable",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "platting",
+    "end_word": "flanking",
+    "optimal_steps": 3
+  },
+  {
+    "start_word": "unfatten",
+    "end_word": "ungirded",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "ventless",
+    "end_word": "modeless",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "inheaven",
+    "end_word": "unwarped",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "shearing",
+    "end_word": "stooping",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "unringed",
+    "end_word": "unleaded",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "overrace",
+    "end_word": "overworn",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "tuskless",
+    "end_word": "wingless",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "unpilled",
+    "end_word": "unranked",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "coalless",
+    "end_word": "joltless",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "unwished",
+    "end_word": "uncitied",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "uncocted",
+    "end_word": "unchewed",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "unharked",
+    "end_word": "uncoifed",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "plumbery",
+    "end_word": "crabbery",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "rentless",
+    "end_word": "hazeless",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "unhoused",
+    "end_word": "unwagged",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "undolled",
+    "end_word": "unheaven",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "unspewed",
+    "end_word": "unstaged",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "unrooted",
+    "end_word": "unsnared",
+    "optimal_steps": 6
+  },
+  {
+    "start_word": "unvested",
+    "end_word": "unpanged",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "unsmiled",
+    "end_word": "unelated",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "unrugged",
+    "end_word": "unwilled",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "unworker",
+    "end_word": "unhinted",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "untinted",
+    "end_word": "unteased",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "uncalked",
+    "end_word": "untented",
+    "optimal_steps": 5
+  },
+  {
+    "start_word": "porkless",
+    "end_word": "lordless",
+    "optimal_steps": 3
+  },
+  {
+    "start_word": "bookless",
+    "end_word": "wineless",
+    "optimal_steps": 8
+  },
+  {
+    "start_word": "untabled",
+    "end_word": "unsacked",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "ungraded",
+    "end_word": "unwashed",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "unshowed",
+    "end_word": "undieted",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "ungraded",
+    "end_word": "unhipped",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "unbitter",
+    "end_word": "uncooped",
+    "optimal_steps": 7
+  },
+  {
+    "start_word": "unruined",
+    "end_word": "unbasted",
+    "optimal_steps": 9
+  },
+  {
+    "start_word": "rotation",
+    "end_word": "deletion",
+    "optimal_steps": 4
+  },
+  {
+    "start_word": "enforced",
+    "end_word": "unfelted",
+    "optimal_steps": 10
+  },
+  {
+    "start_word": "inserter",
+    "end_word": "invecked",
+    "optimal_steps": 4
+  }
+]
