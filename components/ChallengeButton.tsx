@@ -97,10 +97,12 @@ export default function ChallengeButton({ challengeDate, onChallengeCreated }: C
       disabled={isLoading}
       className="px-6 py-3 text-white font-semibold rounded-xl disabled:cursor-not-allowed transition-all duration-200 shadow-lg"
       style={{
-        backgroundColor: disabled ? 'color-mix(in srgb, var(--primary) 40%, #1e293b)' : 'var(--primary)',
+        backgroundColor: isLoading
+          ? 'color-mix(in srgb, var(--primary) 40%, #1e293b)'
+          : 'var(--primary)',
       }}
       onMouseEnter={(e) => {
-        if (!disabled) {
+        if (!isLoading) {
           e.currentTarget.style.filter = 'brightness(1.2)';
         }
       }}
