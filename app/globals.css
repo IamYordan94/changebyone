@@ -25,6 +25,7 @@
   --bg-mid2: #152535;
   --bg-mid3: #1a3040;
   --bg-end: #0a0a0f;
+  --bg-image: url('/assets/ocean-breeze-bg.png');
 }
 
 /* Theme 2: Golden Night - Mustard + Oxford Blue + Anti-Flash White */
@@ -40,6 +41,7 @@
   --bg-mid2: #001530;
   --bg-mid3: #001D3D;
   --bg-end: #000000;
+  --bg-image: url('/assets/golden-night-bg.png');
 }
 
 /* Theme 3: Tropical Mist - Blue (Ncs) + Robin Egg Blue + Timberwolf */
@@ -55,6 +57,7 @@
   --bg-mid2: #0d2428;
   --bg-mid3: #103238;
   --bg-end: #0a0a0f;
+  --bg-image: url('/assets/tropical-mist-bg.png');
 }
 
 * {
@@ -65,25 +68,37 @@
 
 body {
   color: var(--foreground);
-  background: linear-gradient(135deg, 
-    var(--bg-start, #0a0a0f) 0%, 
-    var(--bg-mid1, #0a1628) 25%, 
-    var(--bg-mid2, #0c2340) 50%, 
-    var(--bg-mid3, #0f3460) 75%, 
-    var(--bg-end, #0a0a0f) 100%);
-  background-size: 400% 400%;
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--bg-start, #0a0a0f) 80%, transparent) 0%,
+      color-mix(in srgb, var(--bg-mid1, #0a1628) 70%, transparent) 25%,
+      color-mix(in srgb, var(--bg-mid2, #0c2340) 60%, transparent) 50%,
+      color-mix(in srgb, var(--bg-mid3, #0f3460) 70%, transparent) 75%,
+      color-mix(in srgb, var(--bg-end, #0a0a0f) 80%, transparent) 100%),
+    var(--bg-image, none);
+  background-size: 400% 400%, cover;
+  background-position: 0% 50%, center;
+  background-repeat: no-repeat, no-repeat;
   animation: gradientShift 15s ease infinite;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   min-height: 100vh;
-  background-attachment: fixed;
+  background-attachment: fixed, fixed;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   transition: background 0.5s ease;
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Custom scrollbar - Modern style */
@@ -112,7 +127,7 @@ body {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
-  box-shadow: 
+  box-shadow:
     0 8px 32px 0 color-mix(in srgb, var(--primary) 10%, transparent),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -120,7 +135,7 @@ body {
 
 .glass:hover {
   border-color: color-mix(in srgb, var(--primary) 40%, transparent);
-  box-shadow: 
+  box-shadow:
     0 12px 40px 0 color-mix(in srgb, var(--primary) 20%, transparent),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
@@ -139,6 +154,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -159,8 +175,13 @@ body {
 }
 
 @keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .animate-shimmer {

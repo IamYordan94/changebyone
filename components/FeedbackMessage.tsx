@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 interface FeedbackMessageProps {
   type: 'success' | 'error' | 'info';
   message: string;
@@ -31,8 +33,18 @@ export default function FeedbackMessage({ type, message }: FeedbackMessageProps)
 
   return (
     <div className={`p-5 rounded-2xl border-2 ${style.bg} ${style.border} backdrop-blur-sm animate-fade-in-up`}>
-      <p className={`text-center font-bold text-lg ${style.text} flex items-center justify-center gap-2`}>
-        <span className="text-2xl">{style.icon}</span>
+      <p className={`text-center font-bold text-lg ${style.text} flex items-center justify-center gap-3`}>
+        {(type === 'success' || type === 'error') ? (
+          <Image
+            src={type === 'success' ? '/assets/icon-success.png' : '/assets/icon-error.png'}
+            alt={type}
+            width={32}
+            height={32}
+            className="object-contain"
+          />
+        ) : (
+          <span className="text-2xl">{style.icon}</span>
+        )}
         {message}
       </p>
     </div>

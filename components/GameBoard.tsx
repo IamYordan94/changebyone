@@ -22,6 +22,7 @@ import ThemeSwitcher from './ThemeSwitcher';
 import RulesModal from './RulesModal';
 import TimerNotification from './TimerNotification';
 import LeaderboardModal from './LeaderboardModal';
+import MascotAnimation from './MascotAnimation';
 
 export default function GameBoard() {
   const {
@@ -130,7 +131,7 @@ export default function GameBoard() {
 
   const handleHint = (hint: string, nextWord?: string) => {
     setHintMessage(hint);
-    
+
     if (nextWord && activePuzzleLength) {
       // Track hint usage
       setHintsUsedPerPuzzle(prev => ({
@@ -142,8 +143,19 @@ export default function GameBoard() {
 
   const hintsRemaining = activePuzzleLength ? 2 - (hintsUsedPerPuzzle[activePuzzleLength] || 0) : 2;
 
+  // Mascot state
+  const getMascotState = (): 'idle' | 'success' | 'thinking' | 'error' => {
+    if (activePuzzle.status === 'won') return 'success';
+    if (activePuzzle.status === 'lost') return 'error';
+    if (activePuzzle.status === 'playing' && activePuzzle.moves > 0) return 'thinking';
+    return 'idle';
+  };
+
   return (
     <div className="min-h-screen py-12 px-4 animate-fade-in-up">
+      {/* Mascot Animation */}
+      <MascotAnimation state={getMascotState()} show={true} />
+
       {/* Timer Notification - 5 minute reminder */}
       <TimerNotification elapsedTime={elapsedTime} />
 
@@ -154,7 +166,7 @@ export default function GameBoard() {
           <LeaderboardModal />
           <ThemeSwitcher />
         </div>
-        
+
         {/* Header - Change by One */}
         <div className="text-center mb-10">
           <div className="space-y-4">
@@ -162,7 +174,7 @@ export default function GameBoard() {
             <h1 className="text-5xl md:text-6xl font-black tracking-tight text-gradient">
               Change<span className="text-2xl md:text-3xl mx-1 md:mx-2">by</span>One
             </h1>
-            
+
             {/* Objective - Always Visible */}
             <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
               Transform the starting word into the target word by changing <strong className="text-white">one letter at a time</strong>.
@@ -281,10 +293,10 @@ export default function GameBoard() {
 
           {/* Next Challenge Button */}
           {activePuzzle.status === 'won' && (() => {
-            const nextPuzzle = dailyGameState.puzzles.find(p => 
+            const nextPuzzle = dailyGameState.puzzles.find(p =>
               p.length > activePuzzle.length && p.status !== 'won'
             );
-            
+
             return nextPuzzle ? (
               <div className="flex justify-center mt-4">
                 <button
