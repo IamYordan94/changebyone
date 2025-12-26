@@ -27,16 +27,22 @@ export async function getEarliestAvailableDate(): Promise<string | null> {
 
     const result = Array.isArray(resultQuery) ? resultQuery : [];
     
-    if (result.length === 0 || !result[0]?.earliest_date) {
+    if (result.length === 0) {
       return null;
     }
 
-    const earliestDate = result[0].earliest_date;
+    const firstResult = result[0] as { earliest_date: Date | string | null } | undefined;
+    
+    if (!firstResult || !firstResult.earliest_date) {
+      return null;
+    }
+
+    const earliestDate = firstResult.earliest_date;
     // Convert to YYYY-MM-DD format
     if (earliestDate instanceof Date) {
       return normalizeDate(earliestDate);
     }
-    return earliestDate;
+    return earliestDate as string;
   } catch (error) {
     console.error('Error finding earliest available date:', error);
     return null;
