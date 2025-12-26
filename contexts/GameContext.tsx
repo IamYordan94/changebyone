@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import type { DailyChallenge, DailyGameState } from '@/types';
 import {
   initializeDailyGameState,
@@ -41,37 +41,56 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   };
   
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());
+  
+  // Use refs to check current state without adding to dependencies
+  const dailyChallengeRef = useRef<DailyChallenge | null>(null);
+  const dailyGameStateRef = useRef<DailyGameState | null>(null);
+  
+  // Keep refs in sync with state
+  useEffect(() => {
+    dailyChallengeRef.current = dailyChallenge;
+  }, [dailyChallenge]);
+  
+  useEffect(() => {
+    dailyGameStateRef.current = dailyGameState;
+  }, [dailyGameState]);
 
   const loadDailyChallenge = useCallback(async () => {
     try {
       // Skip if we already have the challenge for this date
-      if (dailyChallenge && dailyChallenge.date === selectedDate && dailyGameState) {
+      if (dailyChallengeRef.current && dailyChallengeRef.current.date === selectedDate && dailyGameStateRef.current) {
         return;
       }
       
       setIsLoading(true);
       setError(null);
       
-      // Wait for words to be loaded
-      let wordsReady = false;
-      let attempts = 0;
-      while (!wordsReady && attempts < 50) {
-        try {
-          const count = getTotalWordCount();
-          if (count > 0) {
-            wordsReady = true;
-          } else {
+      // Quick check if words are loaded (don't wait if already loaded)
+      try {
+        const count = getTotalWordCount();
+        if (count === 0) {
+          // Words not loaded yet, wait briefly
+          let wordsReady = false;
+          let attempts = 0;
+          while (!wordsReady && attempts < 10) {
             await new Promise(resolve => setTimeout(resolve, 100));
-            attempts++;
+            try {
+              const checkCount = getTotalWordCount();
+              if (checkCount > 0) {
+                wordsReady = true;
+              } else {
+                attempts++;
+              }
+            } catch {
+              attempts++;
+            }
           }
-        } catch {
-          // Words not loaded yet
-          await new Promise(resolve => setTimeout(resolve, 100));
-          attempts++;
+          
+          if (!wordsReady) {
+            throw new Error('Word dictionary not loaded. Please refresh the page.');
+          }
         }
-      }
-      
-      if (!wordsReady) {
+      } catch {
         throw new Error('Word dictionary not loaded. Please refresh the page.');
       }
       
@@ -127,7 +146,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedDate, dailyChallenge, dailyGameState]);
+  }, [selectedDate]); // Only depend on selectedDate - this is what should trigger reloads
 
   const handleSubmitWord = useCallback(async (puzzleLength: number, word: string) => {
     if (!dailyGameState) {
