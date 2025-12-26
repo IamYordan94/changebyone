@@ -1,27 +1,50 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getDailyChallenge, ensureDailyChallengeExists } from '@/lib/dailyChallenge';
 import { loadWordsServer } from '@/lib/loadWordsServer';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     // Load words on server side before validating
     loadWordsServer();
     
-    const today = new Date();
-    let challenge = await getDailyChallenge(today);
+    // Get date from query parameter, default to today
+    const searchParams = request.nextUrl.searchParams;
+    const dateParam = searchParams.get('date');
+    
+    let targetDate: Date;
+    if (dateParam) {
+      // Validate date format and ensure it's not in the future
+      const parsedDate = new Date(dateParam);
+      const today = new Date();
+      today.setHours(23, 59, 59, 999); // End of today
+      
+      if (isNaN(parsedDate.getTime())) {
+        // Invalid date format, use today
+        targetDate = new Date();
+      } else if (parsedDate > today) {
+        // Future date, use today
+        targetDate = new Date();
+      } else {
+        targetDate = parsedDate;
+      }
+    } else {
+      targetDate = new Date();
+    }
+    
+    let challenge = await getDailyChallenge(targetDate);
     
     // If no challenge exists, create all 6 puzzles
     // This uses pre-generated word pairs from the database
     if (!challenge) {
-      challenge = await ensureDailyChallengeExists(today);
+      challenge = await ensureDailyChallengeExists(targetDate);
     }
     
     // Ensure we have all 6 puzzles
     if (challenge && challenge.puzzles.length < 6) {
       // Some puzzles might be missing, try to create them
-      challenge = await ensureDailyChallengeExists(today);
+      challenge = await ensureDailyChallengeExists(targetDate);
     }
     
     return NextResponse.json(challenge);

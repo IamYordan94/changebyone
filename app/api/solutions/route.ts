@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     const puzzleEndTime = body.puzzle_end_time ? new Date(body.puzzle_end_time) : null;
 
     // Insert solution with timer data
-    const result = await sql`
+    const resultQuery = await sql`
       INSERT INTO user_solutions (
         challenge_date, 
         word_length, 
@@ -57,6 +57,8 @@ export async function POST(request: Request) {
       )
       RETURNING *
     `;
+
+    const result = Array.isArray(resultQuery) ? resultQuery : [];
 
     if (!result || result.length === 0) {
       console.error('Error saving solution');

@@ -48,4 +48,6 @@ function getSql(): NeonSql {
  * Neon serverless client, lazily initialized on first query.
  * Use as: await sql`SELECT ...`
  */
-export const sql: NeonSql = ((...args: any[]) => getSql()(...args)) as NeonSql;
+export const sql = ((...args: Parameters<NeonSql>) => {
+  return getSql()(...args);
+}) as NeonSql;

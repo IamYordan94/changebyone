@@ -27,14 +27,17 @@ export async function GET(
       SELECT * FROM challenges WHERE challenge_code = ${code}
     `;
 
-    if (challenges.length === 0) {
+    // Type assertion and array check
+    const challengesArray = Array.isArray(challenges) ? challenges : [];
+
+    if (challengesArray.length === 0) {
       return NextResponse.json(
         { error: 'Challenge not found' },
         { status: 404 }
       );
     }
 
-    const challenge = challenges[0];
+    const challenge = challengesArray[0] as any;
 
     // Check if expired
     if (isChallengeExpired(challenge.expires_at)) {
@@ -44,15 +47,18 @@ export async function GET(
     }
 
     // Get participants
-    const participants = await sql`
+    const participantsResult = await sql`
       SELECT * FROM challenge_participants 
       WHERE challenge_id = ${challenge.id}
       ORDER BY completion_time_ms ASC NULLS LAST, joined_at ASC
     `;
 
+    // Type assertion and array check for participants
+    const participants = Array.isArray(participantsResult) ? participantsResult : [];
+
     // Convert participants array to object format for Challenge interface
     const participantsObj: Record<string, any> = {};
-    (participants || []).forEach((p: any) => {
+    participants.forEach((p: any) => {
       const key = p.user_id || p.session_id || `participant_${p.id}`;
       participantsObj[key] = {
         user_id: p.user_id,

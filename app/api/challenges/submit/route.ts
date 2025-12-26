@@ -21,9 +21,11 @@ export async function POST(request: Request) {
     }
 
     // Get challenge
-    const challenges = await sql`
+    const challengesResult = await sql`
       SELECT * FROM challenges WHERE challenge_code = ${challenge_code}
     `;
+
+    const challenges = Array.isArray(challengesResult) ? challengesResult : [];
 
     if (challenges.length === 0) {
       return NextResponse.json(
@@ -32,15 +34,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const challenge = challenges[0];
+    const challenge = challenges[0] as any;
 
     // Get participant
     const participantId = user_id || session_id;
-    const participants = await sql`
+    const participantsResult = await sql`
       SELECT * FROM challenge_participants 
       WHERE challenge_id = ${challenge.id} 
         AND (user_id = ${participantId} OR session_id = ${participantId})
     `;
+
+    const participants = Array.isArray(participantsResult) ? participantsResult : [];
 
     if (participants.length === 0) {
       return NextResponse.json(
@@ -49,7 +53,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const participant = participants[0];
+    const participant = participants[0] as any;
 
     // Update participant with completion data
     await sql`
@@ -63,9 +67,11 @@ export async function POST(request: Request) {
     `;
 
     // Check if all participants have completed
-    const allParticipants = await sql`
+    const allParticipantsResult = await sql`
       SELECT * FROM challenge_participants WHERE challenge_id = ${challenge.id}
     `;
+
+    const allParticipants = Array.isArray(allParticipantsResult) ? allParticipantsResult : [];
 
     const allCompleted = allParticipants.every((p: any) => p.completion_time_ms !== null);
 

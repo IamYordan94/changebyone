@@ -296,7 +296,8 @@ export function submitWordToPuzzle(
  */
 export function resetPuzzle(
   state: DailyGameState,
-  puzzleLength: number
+  puzzleLength: number,
+  preserveTimer: boolean = true
 ): DailyGameState {
   const puzzleIndex = state.puzzles.findIndex(p => p.length === puzzleLength);
   
@@ -307,15 +308,20 @@ export function resetPuzzle(
   const puzzleState = state.puzzles[puzzleIndex];
   const updatedPuzzles = [...state.puzzles];
 
+  // Determine status: if timer was started, keep it as 'playing', otherwise 'not_started'
+  const newStatus = (preserveTimer && puzzleState.timerStartTime) ? 'playing' : 'not_started';
+
   updatedPuzzles[puzzleIndex] = {
     ...puzzleState,
     currentWord: puzzleState.start_word,
     wordChain: [puzzleState.start_word],
     moves: 0,
-    status: 'not_started',
+    status: newStatus,
     errors: [],
-    timerStartTime: undefined,
-    completionTimeMs: undefined,
+    // Preserve timer if requested (timer continues running)
+    timerStartTime: preserveTimer ? puzzleState.timerStartTime : undefined,
+    // Keep completionTimeMs if puzzle was already won (for history)
+    completionTimeMs: preserveTimer && puzzleState.status === 'won' ? puzzleState.completionTimeMs : undefined,
   };
 
   // Recalculate progress

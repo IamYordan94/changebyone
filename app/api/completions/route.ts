@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 
     // Validate completion_times has all 6 puzzles (3-8 letters)
     const requiredLengths = [3, 4, 5, 6, 7, 8];
-    const hasAllPuzzles = requiredLengths.every(len => 
+    const hasAllPuzzles = requiredLengths.every(len =>
       body.completion_times[len] !== undefined && body.completion_times[len] > 0
     );
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
     // Insert daily completion
     // Note: Multiple completions per user per date are allowed (no unique constraint)
-    const result = await sql`
+    const resultQuery = await sql`
       INSERT INTO daily_completions (
         challenge_date,
         user_id,
@@ -54,6 +54,8 @@ export async function POST(request: Request) {
       )
       RETURNING *
     `;
+
+    const result = Array.isArray(resultQuery) ? resultQuery : [];
 
     if (!result || result.length === 0) {
       return NextResponse.json(

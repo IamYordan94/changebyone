@@ -28,9 +28,11 @@ export async function POST(request: Request) {
     }
 
     // Get challenge
-    const challenges = await sql`
+    const challengesResult = await sql`
       SELECT * FROM challenges WHERE challenge_code = ${challenge_code}
     `;
+
+    const challenges = Array.isArray(challengesResult) ? challengesResult : [];
 
     if (challenges.length === 0) {
       return NextResponse.json(
@@ -39,7 +41,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const challenge = challenges[0];
+    const challenge = challenges[0] as any;
 
     // Check if expired
     if (isChallengeExpired(challenge.expires_at)) {
@@ -63,11 +65,13 @@ export async function POST(request: Request) {
 
     // Check if user is already a participant
     const participantId = user_id || session_id;
-    const existingParticipants = await sql`
+    const existingParticipantsResult = await sql`
       SELECT * FROM challenge_participants 
       WHERE challenge_id = ${challenge.id} 
         AND (user_id = ${participantId} OR session_id = ${participantId})
     `;
+
+    const existingParticipants = Array.isArray(existingParticipantsResult) ? existingParticipantsResult : [];
 
     if (existingParticipants.length > 0) {
       // Already participating, return challenge
@@ -89,9 +93,11 @@ export async function POST(request: Request) {
     }
 
     // Return updated challenge
-    const updated = await sql`
+    const updatedResult = await sql`
       SELECT * FROM challenges WHERE id = ${challenge.id}
     `;
+
+    const updated = Array.isArray(updatedResult) ? updatedResult : [];
 
     return NextResponse.json(updated[0]);
   } catch (error) {

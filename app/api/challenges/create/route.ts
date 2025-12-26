@@ -27,12 +27,14 @@ export async function POST(request: Request) {
 
     while (!isUnique && attempts < 10) {
       challengeCode = generateChallengeCode();
-      
+
       // Check if code already exists
-      const existing = await sql`
+      const existingResult = await sql`
         SELECT id FROM challenges WHERE challenge_code = ${challengeCode}
       `;
-      
+
+      const existing = Array.isArray(existingResult) ? existingResult : [];
+
       if (existing.length === 0) {
         isUnique = true;
       } else {
@@ -50,11 +52,13 @@ export async function POST(request: Request) {
     const expiresAt = getDefaultChallengeExpiration();
 
     // Create challenge
-    const result = await sql`
+    const resultQuery = await sql`
       INSERT INTO challenges (challenge_code, challenger_id, challenge_date, status, expires_at)
       VALUES (${challengeCode!}, ${challenger_id || null}, ${challenge_date}, 'pending', ${expiresAt})
       RETURNING *
     `;
+
+    const result = Array.isArray(resultQuery) ? resultQuery : [];
 
     if (!result || result.length === 0) {
       return NextResponse.json(

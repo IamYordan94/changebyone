@@ -23,6 +23,8 @@ import RulesModal from './RulesModal';
 import TimerNotification from './TimerNotification';
 import LeaderboardModal from './LeaderboardModal';
 import MascotAnimation from './MascotAnimation';
+import DatePicker from './DatePicker';
+import ResetConfirmModal from './ResetConfirmModal';
 
 export default function GameBoard() {
   const {
@@ -31,12 +33,16 @@ export default function GameBoard() {
     isLoading,
     error,
     submitWord,
+    resetPuzzle,
     activePuzzleLength,
     setActivePuzzleLength,
+    selectedDate,
+    setSelectedDate,
   } = useGame();
   const [hintMessage, setHintMessage] = useState<string | null>(null);
   const [hintsUsedPerPuzzle, setHintsUsedPerPuzzle] = useState<Record<number, number>>({});
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   // Get active puzzle state
   const activePuzzle = dailyGameState?.puzzles.find(
@@ -89,7 +95,7 @@ export default function GameBoard() {
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-slate-700 mx-auto mb-6" style={{ borderTopColor: 'var(--primary)' }}></div>
             <div className="absolute inset-0 rounded-full border-4 border-transparent animate-spin" style={{ borderTopColor: 'var(--secondary)', animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
           </div>
-          <p className="text-slate-300 text-xl font-medium mt-4">Loading today's challenge...</p>
+          <p className="text-slate-300 text-xl font-medium mt-4">Loading challenge...</p>
           <div className="mt-4 flex gap-2 justify-center">
             <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'var(--primary)', animationDelay: '0s' }}></div>
             <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'var(--secondary)', animationDelay: '0.2s' }}></div>
@@ -143,6 +149,13 @@ export default function GameBoard() {
 
   const hintsRemaining = activePuzzleLength ? 2 - (hintsUsedPerPuzzle[activePuzzleLength] || 0) : 2;
 
+  const handleReset = () => {
+    if (activePuzzleLength) {
+      resetPuzzle(activePuzzleLength);
+      setShowResetModal(false);
+    }
+  };
+
   // Mascot state
   const getMascotState = (): 'idle' | 'success' | 'thinking' | 'error' => {
     if (activePuzzle.status === 'won') return 'success';
@@ -179,6 +192,15 @@ export default function GameBoard() {
             <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
               Transform the starting word into the target word by changing <strong className="text-white">one letter at a time</strong>.
             </p>
+
+            {/* Date Picker */}
+            <div className="flex justify-center mt-4">
+              <DatePicker
+                selectedDate={selectedDate}
+                onDateChange={setSelectedDate}
+                maxDate={new Date().toISOString().split('T')[0]}
+              />
+            </div>
           </div>
         </div>
 
@@ -274,6 +296,29 @@ export default function GameBoard() {
               startWord={activePuzzle.start_word}
               optimalSteps={dailyChallenge?.puzzles.find(p => p.length === activePuzzle.length)?.optimal_steps || 0}
             />
+            {(activePuzzle.status === 'playing' || activePuzzle.status === 'not_started') && (
+              <button
+                onClick={() => setShowResetModal(true)}
+                className="px-4 py-2 rounded-xl border border-slate-600/40 hover:border-slate-500/60 transition-all duration-300 flex items-center gap-2 text-slate-300 hover:text-slate-100"
+                title="Reset puzzle (timer continues)"
+              >
+                <svg 
+                  width="18" 
+                  height="18" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                >
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                <span className="font-medium">Reset</span>
+              </button>
+            )}
             {activePuzzle.status === 'won' && (
               <ShareButton
                 gameState={{
@@ -363,6 +408,13 @@ export default function GameBoard() {
           </div>
         </div>
       </div>
+
+      {/* Reset Confirmation Modal */}
+      <ResetConfirmModal
+        isOpen={showResetModal}
+        onConfirm={handleReset}
+        onCancel={() => setShowResetModal(false)}
+      />
     </div>
   );
 }

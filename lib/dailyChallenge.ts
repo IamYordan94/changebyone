@@ -17,14 +17,16 @@ function normalizeDate(date: Date): string {
  */
 export async function getDailyChallenge(date: Date = new Date()): Promise<DailyChallenge | null> {
   const dateStr = normalizeDate(date);
-  
+
   // Cast date column to DATE type to ensure proper comparison
-  const result = await sql`
+  const resultQuery = await sql`
     SELECT * FROM daily_challenges 
     WHERE date::date = ${dateStr}::date
     ORDER BY word_length ASC
   `;
-  
+
+  const result = Array.isArray(resultQuery) ? resultQuery : [];
+
   if (result.length === 0) {
     return null;
   }
@@ -55,13 +57,15 @@ async function getWordPairForDate(
 
   try {
     // Query schedule table and join with word_pairs
-    const result = await sql`
+    const resultQuery = await sql`
       SELECT wp.start_word, wp.end_word, wp.optimal_steps
       FROM daily_schedule ds
       INNER JOIN word_pairs wp ON ds.word_pair_id = wp.id
       WHERE ds.schedule_date = ${dateStr}::date
         AND ds.word_length = ${wordLength}
     `;
+
+    const result = Array.isArray(resultQuery) ? resultQuery : [];
 
     if (result.length === 0) {
       if (process.env.NODE_ENV === 'development') {
@@ -90,14 +94,14 @@ async function createPuzzleForDate(
 
   // Get word pair from schedule
   const pair = await getWordPairForDate(date, wordLength);
-  
+
   if (!pair) {
     throw new Error(`No pair scheduled for date ${dateStr} and length ${wordLength}. Please run populateDailySchedule.ts and fillScheduleGaps.ts to populate the schedule.`);
   }
 
   // Insert into daily_challenges
   try {
-    const result = await sql`
+    const resultQuery = await sql`
       INSERT INTO daily_challenges (date, word_length, start_word, end_word, optimal_steps, max_moves)
       VALUES (${dateStr}, ${wordLength}, ${pair.start_word}, ${pair.end_word}, ${pair.optimal_steps}, 10)
       ON CONFLICT (date, word_length) DO UPDATE
@@ -107,6 +111,8 @@ async function createPuzzleForDate(
           max_moves = EXCLUDED.max_moves
       RETURNING *
     `;
+
+    const result = Array.isArray(resultQuery) ? resultQuery : [];
 
     if (!result || result.length === 0) {
       throw new Error(`Failed to create puzzle for length ${wordLength}`);
@@ -123,11 +129,11 @@ async function createPuzzleForDate(
         name: error instanceof Error ? error.name : undefined,
       });
     }
-    
+
     // Provide more detailed error message for database issues
     if (error instanceof Error) {
       const errorMsg = error.message;
-      
+
       if (errorMsg.includes('min_steps') || errorMsg.includes('23502')) {
         throw new Error(`Database schema error: The 'min_steps' column still exists. Please run migration 007_drop_min_steps.sql in your Neon database. Original error: ${errorMsg}`);
       }
@@ -152,17 +158,19 @@ export async function ensureDailyChallengeExists(
   const wordLengths = [3, 4, 5, 6, 7, 8];
 
   // Check which puzzles already exist
-  const existing = await sql`
+  const existingQuery = await sql`
     SELECT word_length FROM daily_challenges 
     WHERE date::date = ${dateStr}::date
   `;
-  
+
+  const existing = Array.isArray(existingQuery) ? existingQuery : [];
+
   const existingLengths = new Set((existing as { word_length: number }[]).map(r => r.word_length));
 
   // Create missing puzzles
   const errors: string[] = [];
   let createdCount = 0;
-  
+
   for (const length of wordLengths) {
     if (!existingLengths.has(length)) {
       try {
@@ -195,23 +203,25 @@ export async function ensureDailyChallengeExists(
   // Get all puzzles for this date
   // Add a small delay to ensure database consistency
   await new Promise(resolve => setTimeout(resolve, 100));
-  
+
   // Try to get the challenge, with retry logic
   let challenge = await getDailyChallenge(date);
-  
+
   // If not found, try querying directly from database as fallback
   if (!challenge || challenge.puzzles.length === 0) {
     if (process.env.NODE_ENV === 'development') {
       console.log(`getDailyChallenge returned empty, querying database directly for date ${dateStr}`);
     }
-    
+
     // Direct database query as fallback
-    const directResult = await sql`
+    const directResultQuery = await sql`
       SELECT * FROM daily_challenges 
       WHERE date::date = ${dateStr}::date
       ORDER BY word_length ASC
     `;
-    
+
+    const directResult = Array.isArray(directResultQuery) ? directResultQuery : [];
+
     if (directResult.length > 0) {
       const puzzles: Puzzle[] = (directResult as DailyChallengeRow[]).map(row => ({
         length: row.word_length,
@@ -220,21 +230,21 @@ export async function ensureDailyChallengeExists(
         optimal_steps: row.optimal_steps,
         max_moves: row.max_moves,
       }));
-      
+
       challenge = {
         date: dateStr,
         puzzles,
       };
-      
+
       if (process.env.NODE_ENV === 'development') {
         console.log(`Direct query found ${puzzles.length} puzzles`);
       }
     }
   }
-  
+
   if (!challenge || challenge.puzzles.length === 0) {
-    const errorDetails = errors.length > 0 
-      ? ` Errors: ${errors.join('; ')}` 
+    const errorDetails = errors.length > 0
+      ? ` Errors: ${errors.join('; ')}`
       : ` No puzzles were found after creation. Created ${createdCount} puzzles, but query returned 0.`;
     throw new Error(`Failed to create daily challenge.${errorDetails}`);
   }

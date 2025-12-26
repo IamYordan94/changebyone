@@ -21,6 +21,8 @@ interface GameContextType {
   loadDailyChallenge: () => Promise<void>;
   activePuzzleLength: number | null;
   setActivePuzzleLength: (length: number) => void;
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -31,6 +33,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activePuzzleLength, setActivePuzzleLength] = useState<number | null>(null);
+  
+  // Get today's date in YYYY-MM-DD format
+  const getTodayDateString = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
+  
+  const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());
 
   const loadDailyChallenge = useCallback(async () => {
     try {
@@ -60,8 +70,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         throw new Error('Word dictionary not loaded. Please refresh the page.');
       }
       
-      // Fetch today's challenge from API
-      const response = await fetch('/api/challenges');
+      // Fetch challenge for selected date from API
+      const response = await fetch(`/api/challenges?date=${selectedDate}`);
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to load daily challenge');
@@ -105,7 +115,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [selectedDate]);
 
   const handleSubmitWord = useCallback(async (puzzleLength: number, word: string) => {
     if (!dailyGameState) {
@@ -208,14 +218,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     
-    const newState = resetPuzzle(dailyGameState, puzzleLength);
+    // Preserve timer when resetting (timer continues running)
+    const newState = resetPuzzle(dailyGameState, puzzleLength, true);
     setDailyGameState(newState);
     saveDailyGameStateToStorage(newState);
   }, [dailyGameState]);
 
+  // Load challenge when selected date changes
   useEffect(() => {
     loadDailyChallenge();
-  }, [loadDailyChallenge]);
+  }, [loadDailyChallenge, selectedDate]);
 
   // Auto-save game state whenever it changes
   useEffect(() => {
@@ -236,6 +248,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         loadDailyChallenge,
         activePuzzleLength,
         setActivePuzzleLength,
+        selectedDate,
+        setSelectedDate,
       }}
     >
       {children}
