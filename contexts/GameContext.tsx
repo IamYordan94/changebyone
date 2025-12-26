@@ -44,6 +44,11 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const loadDailyChallenge = useCallback(async () => {
     try {
+      // Skip if we already have the challenge for this date
+      if (dailyChallenge && dailyChallenge.date === selectedDate && dailyGameState) {
+        return;
+      }
+      
       setIsLoading(true);
       setError(null);
       
@@ -83,7 +88,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       if ((challenge as any).error) {
         throw new Error((challenge as any).error);
       }
+      
       setDailyChallenge(challenge);
+      
+      // If the API returned a different date (fallback to earliest available), update selectedDate
+      // The check in loadDailyChallenge will prevent reloading if we already have this challenge
+      if (challenge.date !== selectedDate) {
+        setSelectedDate(challenge.date);
+      }
       
       // Try to load saved game state
       const savedState = loadDailyGameStateFromStorage(challenge.date);
@@ -115,7 +127,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedDate]);
+  }, [selectedDate, dailyChallenge, dailyGameState]);
 
   const handleSubmitWord = useCallback(async (puzzleLength: number, word: string) => {
     if (!dailyGameState) {

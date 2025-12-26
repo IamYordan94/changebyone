@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface DatePickerProps {
   selectedDate: string; // YYYY-MM-DD
@@ -17,10 +17,27 @@ export default function DatePicker({
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [tempDate, setTempDate] = useState(selectedDate);
+  const [earliestDate, setEarliestDate] = useState<string | null>(null);
 
   const today = new Date().toISOString().split('T')[0];
   const maxSelectableDate = maxDate || today;
-  const minSelectableDate = minDate || '2024-01-01'; // Default to reasonable past date
+  
+  // Fetch earliest available date from API
+  useEffect(() => {
+    fetch('/api/challenges/date-range')
+      .then(res => res.json())
+      .then(data => {
+        if (data.earliestDate) {
+          setEarliestDate(data.earliestDate);
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching date range:', err);
+        // Fallback to provided minDate or reasonable default
+      });
+  }, []);
+
+  const minSelectableDate = minDate || earliestDate || '2024-01-01'; // Use fetched earliest date or fallback
 
   const formatDateForDisplay = (dateStr: string): string => {
     const date = new Date(dateStr + 'T00:00:00');

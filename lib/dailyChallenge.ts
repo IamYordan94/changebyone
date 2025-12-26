@@ -13,6 +13,37 @@ function normalizeDate(date: Date): string {
 }
 
 /**
+ * Get the earliest date that has available word pairs in the schedule
+ * Returns null if no dates are available
+ */
+export async function getEarliestAvailableDate(): Promise<string | null> {
+  try {
+    // Find the earliest date that has at least one word pair assigned
+    const resultQuery = await sql`
+      SELECT MIN(schedule_date) as earliest_date
+      FROM daily_schedule
+      WHERE word_pair_id IS NOT NULL
+    `;
+
+    const result = Array.isArray(resultQuery) ? resultQuery : [];
+    
+    if (result.length === 0 || !result[0]?.earliest_date) {
+      return null;
+    }
+
+    const earliestDate = result[0].earliest_date;
+    // Convert to YYYY-MM-DD format
+    if (earliestDate instanceof Date) {
+      return normalizeDate(earliestDate);
+    }
+    return earliestDate;
+  } catch (error) {
+    console.error('Error finding earliest available date:', error);
+    return null;
+  }
+}
+
+/**
  * Get all puzzles for a specific date (new multi-puzzle system)
  */
 export async function getDailyChallenge(date: Date = new Date()): Promise<DailyChallenge | null> {
