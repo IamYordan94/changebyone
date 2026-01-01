@@ -146,17 +146,24 @@ body {
 
 /* Mobile optimizations */
 @media screen and (max-width: 768px) {
-  body {
-    position: fixed;
-    width: 100%;
-    overflow-y: scroll;
-  }
 
+  /* Ensure touch targets are large enough */
   button,
   .button,
   input,
   a {
     min-height: 44px;
     min-width: 44px;
+  }
+
+  /* Better text sizing */
+  body {
+    font-size: 14px;
+  }
+
+  /* Optimize padding */
+  .max-w-5xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 }

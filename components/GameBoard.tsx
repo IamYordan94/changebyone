@@ -149,11 +149,11 @@ export default function GameBoard() {
   };
 
   return (
-    <div className="min-h-screen py-12 px-4 animate-fade-in-up">
+    <div className="min-h-screen py-4 md:py-12 px-2 md:px-4 animate-fade-in-up">
       {/* Mascot Animation */}
       <MascotAnimation state={getMascotState()} show={true} />
 
-      <div className="max-w-5xl mx-auto space-y-8 relative">
+      <div className="max-w-5xl mx-auto space-y-4 md:space-y-8 relative">
         {/* Three-dot menu - Top right corner */}
         <div className="absolute top-0 right-0 z-40">
           <MenuDropdown
