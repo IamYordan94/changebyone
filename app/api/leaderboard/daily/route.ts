@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/leaderboard/daily?date=YYYY-MM-DD
- * Get daily completion leaderboard (fastest solvers who completed all 6 puzzles)
+ * Get daily completion leaderboard (fewest steps for completing all 6 puzzles)
  */
 export async function GET(request: NextRequest) {
   try {
@@ -20,13 +20,12 @@ export async function GET(request: NextRequest) {
           id,
           challenge_date,
           user_id,
-          total_time_ms,
-          completion_times,
+          username,
           solution_paths,
           total_steps,
           completed_at
         FROM daily_completions
-        ORDER BY total_time_ms ASC
+        ORDER BY total_steps ASC
         LIMIT 100
       `;
       return NextResponse.json(result || []);
@@ -39,20 +38,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch top daily completions ordered by total_time_ms (ascending = fastest)
+    // Fetch top daily completions ordered by total_steps (ascending = fewest steps)
     const result = await sql`
       SELECT 
         id,
         challenge_date,
         user_id,
-        total_time_ms,
-        completion_times,
+        username,
         solution_paths,
         total_steps,
         completed_at
       FROM daily_completions
       WHERE challenge_date = ${date}
-      ORDER BY total_time_ms ASC
+      ORDER BY total_steps ASC
       LIMIT 50
     `;
 

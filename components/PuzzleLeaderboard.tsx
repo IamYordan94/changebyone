@@ -32,18 +32,6 @@ export default function PuzzleLeaderboard({ challengeDate, wordLength }: PuzzleL
     fetchLeaderboard();
   }, [challengeDate, wordLength]);
 
-  const formatTime = (ms: number): string => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    const milliseconds = Math.floor((ms % 1000) / 100);
-
-    if (minutes > 0) {
-      return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
-    }
-    return `${seconds}.${milliseconds.toString().padStart(1, '0')}`;
-  };
-
   if (isLoading) {
     return (
       <div className="text-center py-4">
@@ -66,7 +54,7 @@ export default function PuzzleLeaderboard({ challengeDate, wordLength }: PuzzleL
   return (
     <div className="glass rounded-2xl p-6">
       <h3 className="text-lg font-semibold mb-4 text-slate-200">
-        ⚡ {wordLength}-Letter Puzzle - Fastest Times
+        ⚡ {wordLength}-Letter Puzzle - Fewest Steps
       </h3>
       <div className="space-y-2">
         {solutions.map((solution, index) => (
@@ -75,32 +63,26 @@ export default function PuzzleLeaderboard({ challengeDate, wordLength }: PuzzleL
             className="flex justify-between items-center p-3 bg-slate-800/50 rounded-lg border border-slate-700/50"
           >
             <div className="flex items-center gap-3">
-              <span 
+              <span
                 className="font-bold min-w-[2rem]"
                 style={{
-                  color: index === 0 ? '#facc15' : index === 1 ? '#cbd5e1' : index === 2 ? '#d97706' : 'var(--text-primary, var(--primary))'
+                  color: index === 0 ? '#facc15' : index === 1 ? '#cbd5e1' : index === 2 ? '#d97706' : 'var(--primary)'
                 }}
               >
                 #{index + 1}
               </span>
               <div className="flex flex-col">
                 <span className="text-sm text-slate-300">
-                  {solution.user_id || 'Anonymous'}
-                </span>
-                <span className="text-xs text-slate-400">
-                  {solution.steps} moves
+                  {solution.username || 'Anonymous'}
                 </span>
               </div>
             </div>
-            {solution.completion_time_ms && (
-              <span className="font-semibold" style={{ color: 'var(--text-primary, var(--primary))' }}>
-                {formatTime(solution.completion_time_ms)}
-              </span>
-            )}
+            <span className="font-semibold text-primary">
+              {solution.steps} steps
+            </span>
           </div>
         ))}
       </div>
     </div>
   );
 }
-

@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/leaderboard/puzzle?date=YYYY-MM-DD&wordLength=N
- * Get fastest times for a specific puzzle (word length) on a specific date
+ * Get fewest steps for a specific puzzle (word length) on a specific date
  */
 export async function GET(request: NextRequest) {
   try {
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch top solutions for this puzzle ordered by completion_time_ms (ascending = fastest)
+    // Fetch top solutions for this puzzle ordered by steps (ascending = fewest steps)
     const result = await sql`
       SELECT 
         id,
@@ -43,16 +43,13 @@ export async function GET(request: NextRequest) {
         word_length,
         solution_path,
         steps,
-        completion_time_ms,
-        puzzle_start_time,
-        puzzle_end_time,
+        username,
         user_id,
         created_at
       FROM user_solutions
       WHERE challenge_date = ${date} 
         AND word_length = ${length}
-        AND completion_time_ms IS NOT NULL
-      ORDER BY completion_time_ms ASC
+      ORDER BY steps ASC
       LIMIT 50
     `;
 

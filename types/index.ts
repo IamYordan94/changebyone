@@ -49,16 +49,12 @@ export interface PuzzleGameState {
   maxMoves: number;
   status: 'not_started' | 'playing' | 'won' | 'lost';
   errors: string[];
-  timerStartTime?: number; // Date.now() when puzzle started
-  completionTimeMs?: number; // Time taken to complete in milliseconds
 }
 
 export interface DailyGameState {
   date: string;
   puzzles: PuzzleGameState[];
-  overallProgress: number; // e.g., 3/7 completed
-  dailyTimerStartTime?: number; // Date.now() when first puzzle started
-  totalCompletionTimeMs?: number; // Total time for all puzzles in milliseconds
+  overallProgress: number; // e.g., 3/6 completed
 }
 
 export interface ValidationResult {
@@ -73,20 +69,17 @@ export interface UserSolution {
   solution_path: string[];
   steps: number;
   user_id?: string;
+  username?: string;
   created_at?: string;
-  completion_time_ms?: number;
-  puzzle_start_time?: string;
-  puzzle_end_time?: string;
 }
 
 export interface DailyCompletion {
   id?: string;
   challenge_date: string;
   user_id?: string;
-  total_time_ms: number;
-  completion_times: Record<number, number>; // { 3: 45000, 4: 60000, ... }
+  username?: string;
   solution_paths?: Record<number, string[]>; // { 3: ["cat", "cot", ...], ... }
-  total_steps?: number;
+  total_steps: number;
   completed_at?: string;
 }
 
@@ -94,7 +87,8 @@ export type ChallengeStatus = 'pending' | 'accepted' | 'completed' | 'expired';
 
 export interface ChallengeParticipant {
   user_id?: string;
-  completion_time_ms?: number;
+  username?: string;
+  total_steps?: number;
   completed_at?: string;
   solution_paths?: Record<number, string[]>;
 }

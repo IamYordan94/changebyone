@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   // Fully anonymous mode: we don't provide a per-user solutions endpoint because
-  // there is no trusted identity to scope results to. “My Stats” is local-only.
+  // there is no trusted identity to scope results to. "My Stats" is local-only.
   return NextResponse.json(
     { error: 'Not available in anonymous mode' },
     { status: 405 }
@@ -28,12 +28,7 @@ export async function POST(request: Request) {
     // word_length is required (default to 3 if not provided for backward compatibility)
     const wordLength = body.word_length || 3;
 
-    // Parse timer fields (optional for backward compatibility)
-    const completionTimeMs = body.completion_time_ms || null;
-    const puzzleStartTime = body.puzzle_start_time ? new Date(body.puzzle_start_time) : null;
-    const puzzleEndTime = body.puzzle_end_time ? new Date(body.puzzle_end_time) : null;
-
-    // Insert solution with timer data
+    // Insert solution with username
     const resultQuery = await sql`
       INSERT INTO user_solutions (
         challenge_date, 
@@ -41,9 +36,7 @@ export async function POST(request: Request) {
         solution_path, 
         steps, 
         user_id,
-        completion_time_ms,
-        puzzle_start_time,
-        puzzle_end_time
+        username
       )
       VALUES (
         ${body.challenge_date}, 
@@ -51,9 +44,7 @@ export async function POST(request: Request) {
         ${body.solution_path}, 
         ${body.steps}, 
         ${body.user_id || null},
-        ${completionTimeMs},
-        ${puzzleStartTime},
-        ${puzzleEndTime}
+        ${body.username || 'Anonymous'}
       )
       RETURNING *
     `;

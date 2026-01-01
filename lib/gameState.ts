@@ -38,7 +38,7 @@ export function submitWord(
   if (state.status !== 'playing') {
     return state;
   }
-  
+
   // Validate the word
   const validation = validateWord(
     word,
@@ -46,24 +46,24 @@ export function submitWord(
     dictionary,
     state.wordChain
   );
-  
+
   if (!validation.isValid) {
     return {
       ...state,
       errors: [...state.errors, validation.error || 'Invalid word'],
     };
   }
-  
+
   const wordLower = word.toLowerCase();
   const newChain = [...state.wordChain, wordLower];
   const newMoves = state.moves + 1;
-  
+
   // Check win condition
   const won = checkWinCondition(wordLower, state.targetWord);
-  
+
   // Check lose condition (out of moves)
   const lost = !won && newMoves >= state.maxMoves;
-  
+
   return {
     ...state,
     currentWord: wordLower,
@@ -97,7 +97,7 @@ export function loadGameStateFromStorage(
   if (typeof window === 'undefined') {
     return null;
   }
-  
+
   try {
     const stored = localStorage.getItem(`wordLadder_${dailyChallengeDate}`);
     if (stored) {
@@ -110,7 +110,7 @@ export function loadGameStateFromStorage(
   } catch (error) {
     console.error('Error loading game state:', error);
   }
-  
+
   return null;
 }
 
@@ -121,7 +121,7 @@ export function saveGameStateToStorage(state: GameState): void {
   if (typeof window === 'undefined') {
     return;
   }
-  
+
   try {
     localStorage.setItem(
       `wordLadder_${state.dailyChallengeDate}`,
@@ -139,7 +139,7 @@ export function clearGameStateFromStorage(dailyChallengeDate: string): void {
   if (typeof window === 'undefined') {
     return;
   }
-  
+
   localStorage.removeItem(`wordLadder_${dailyChallengeDate}`);
 }
 
@@ -161,8 +161,6 @@ export function initializePuzzleState(puzzle: Puzzle): PuzzleGameState {
     maxMoves: puzzle.max_moves,
     status: 'not_started',
     errors: [],
-    timerStartTime: undefined,
-    completionTimeMs: undefined,
   };
 }
 
@@ -174,13 +172,11 @@ export function initializeDailyGameState(
   puzzles: Puzzle[]
 ): DailyGameState {
   const puzzleStates = puzzles.map(puzzle => initializePuzzleState(puzzle));
-  
+
   return {
     date,
     puzzles: puzzleStates,
     overallProgress: 0,
-    dailyTimerStartTime: undefined,
-    totalCompletionTimeMs: undefined,
   };
 }
 
@@ -194,7 +190,7 @@ export function submitWordToPuzzle(
 ): DailyGameState {
   // Find the puzzle
   const puzzleIndex = state.puzzles.findIndex(p => p.length === puzzleLength);
-  
+
   if (puzzleIndex === -1) {
     return state;
   }
@@ -219,16 +215,13 @@ export function submitWordToPuzzle(
 
   // Create updated puzzle state
   const updatedPuzzles = [...state.puzzles];
-  const now = Date.now();
-  
+
   if (!validation.isValid) {
     const wasNotStarted = puzzleState.status === 'not_started';
     updatedPuzzles[puzzleIndex] = {
       ...puzzleState,
       errors: [...puzzleState.errors, validation.error || 'Invalid word'],
       status: wasNotStarted ? 'playing' : puzzleState.status,
-      // Start timer when puzzle first becomes active
-      timerStartTime: wasNotStarted ? now : puzzleState.timerStartTime,
     };
   } else {
     const wordLower = word.toLowerCase();
@@ -241,16 +234,6 @@ export function submitWordToPuzzle(
     // Check lose condition (out of moves)
     const lost = !won && newMoves >= puzzleState.maxMoves;
 
-    // Start timer if puzzle just started
-    const wasNotStarted = puzzleState.status === 'not_started';
-    const timerStartTime = wasNotStarted ? now : puzzleState.timerStartTime;
-
-    // Calculate completion time if won
-    let completionTimeMs = puzzleState.completionTimeMs;
-    if (won && timerStartTime) {
-      completionTimeMs = now - timerStartTime;
-    }
-
     updatedPuzzles[puzzleIndex] = {
       ...puzzleState,
       currentWord: wordLower,
@@ -258,36 +241,17 @@ export function submitWordToPuzzle(
       moves: newMoves,
       status: won ? 'won' : lost ? 'lost' : 'playing',
       errors: [], // Clear errors on successful move
-      timerStartTime,
-      completionTimeMs,
     };
-  }
-
-  // Start daily timer when first puzzle starts
-  let dailyTimerStartTime = state.dailyTimerStartTime;
-  if (!dailyTimerStartTime && updatedPuzzles.some(p => p.status === 'playing' || p.status === 'won')) {
-    dailyTimerStartTime = now;
   }
 
   // Calculate overall progress
   const completedPuzzles = updatedPuzzles.filter(p => p.status === 'won').length;
   const overallProgress = completedPuzzles / updatedPuzzles.length;
 
-  // Calculate total completion time if all puzzles are won
-  // Sum of all individual puzzle completion times (not continuous timer)
-  let totalCompletionTimeMs = state.totalCompletionTimeMs;
-  if (completedPuzzles === updatedPuzzles.length && !totalCompletionTimeMs) {
-    totalCompletionTimeMs = updatedPuzzles.reduce((sum, puzzle) => {
-      return sum + (puzzle.completionTimeMs || 0);
-    }, 0);
-  }
-
   return {
     ...state,
     puzzles: updatedPuzzles,
     overallProgress,
-    dailyTimerStartTime,
-    totalCompletionTimeMs,
   };
 }
 
@@ -297,10 +261,10 @@ export function submitWordToPuzzle(
 export function resetPuzzle(
   state: DailyGameState,
   puzzleLength: number,
-  preserveTimer: boolean = true
+  preserveTimer: boolean = false
 ): DailyGameState {
   const puzzleIndex = state.puzzles.findIndex(p => p.length === puzzleLength);
-  
+
   if (puzzleIndex === -1) {
     return state;
   }
@@ -308,20 +272,13 @@ export function resetPuzzle(
   const puzzleState = state.puzzles[puzzleIndex];
   const updatedPuzzles = [...state.puzzles];
 
-  // Determine status: if timer was started, keep it as 'playing', otherwise 'not_started'
-  const newStatus = (preserveTimer && puzzleState.timerStartTime) ? 'playing' : 'not_started';
-
   updatedPuzzles[puzzleIndex] = {
     ...puzzleState,
     currentWord: puzzleState.start_word,
     wordChain: [puzzleState.start_word],
     moves: 0,
-    status: newStatus,
+    status: 'not_started',
     errors: [],
-    // Preserve timer if requested (timer continues running)
-    timerStartTime: preserveTimer ? puzzleState.timerStartTime : undefined,
-    // Keep completionTimeMs if puzzle was already won (for history)
-    completionTimeMs: preserveTimer && puzzleState.status === 'won' ? puzzleState.completionTimeMs : undefined,
   };
 
   // Recalculate progress

@@ -13,22 +13,9 @@ export async function POST(request: Request) {
     const body: DailyCompletion = await request.json();
 
     // Validate required fields
-    if (!body.challenge_date || !body.total_time_ms || !body.completion_times) {
+    if (!body.challenge_date || !body.total_steps) {
       return NextResponse.json(
-        { error: 'Missing required fields: challenge_date, total_time_ms, completion_times' },
-        { status: 400 }
-      );
-    }
-
-    // Validate completion_times has all 6 puzzles (3-8 letters)
-    const requiredLengths = [3, 4, 5, 6, 7, 8];
-    const hasAllPuzzles = requiredLengths.every(len =>
-      body.completion_times[len] !== undefined && body.completion_times[len] > 0
-    );
-
-    if (!hasAllPuzzles) {
-      return NextResponse.json(
-        { error: 'completion_times must include all 6 puzzles (3-8 letters)' },
+        { error: 'Missing required fields: challenge_date, total_steps' },
         { status: 400 }
       );
     }
@@ -39,18 +26,16 @@ export async function POST(request: Request) {
       INSERT INTO daily_completions (
         challenge_date,
         user_id,
-        total_time_ms,
-        completion_times,
+        username,
         solution_paths,
         total_steps
       )
       VALUES (
         ${body.challenge_date},
         ${body.user_id || null},
-        ${body.total_time_ms},
-        ${JSON.stringify(body.completion_times)}::jsonb,
+        ${body.username || 'Anonymous'},
         ${body.solution_paths ? JSON.stringify(body.solution_paths) : null}::jsonb,
-        ${body.total_steps || null}
+        ${body.total_steps}
       )
       RETURNING *
     `;
@@ -90,11 +75,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch top daily completions ordered by total_time_ms (ascending = fastest)
+    // Fetch top daily completions ordered by total_steps (ascending = fewest steps)
     const result = await sql`
       SELECT * FROM daily_completions
       WHERE challenge_date = ${date}
-      ORDER BY total_time_ms ASC
+      ORDER BY total_steps ASC
       LIMIT 20
     `;
 

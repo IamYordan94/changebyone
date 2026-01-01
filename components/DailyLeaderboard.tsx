@@ -29,18 +29,6 @@ export default function DailyLeaderboard({ challengeDate }: DailyLeaderboardProp
     fetchLeaderboard();
   }, [challengeDate]);
 
-  const formatTime = (ms: number): string => {
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    const milliseconds = Math.floor((ms % 1000) / 100);
-
-    if (minutes > 0) {
-      return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
-    }
-    return `${seconds}.${milliseconds.toString().padStart(1, '0')}`;
-  };
-
   if (isLoading) {
     return (
       <div className="text-center py-4">
@@ -63,7 +51,7 @@ export default function DailyLeaderboard({ challengeDate }: DailyLeaderboardProp
   return (
     <div className="glass rounded-2xl p-6">
       <h3 className="text-lg font-semibold mb-4 text-slate-200">
-        🏆 Daily Challenge - Fastest Solvers
+        🏆 Daily Challenge - Fewest Steps
       </h3>
       <div className="space-y-2">
         {completions.map((completion, index) => (
@@ -72,27 +60,22 @@ export default function DailyLeaderboard({ challengeDate }: DailyLeaderboardProp
             className="flex justify-between items-center p-3 bg-slate-800/50 rounded-lg border border-slate-700/50"
           >
             <div className="flex items-center gap-3">
-              <span 
+              <span
                 className="font-bold min-w-[2rem]"
                 style={{
-                  color: index === 0 ? '#facc15' : index === 1 ? '#cbd5e1' : index === 2 ? '#d97706' : 'var(--text-primary, var(--primary))'
+                  color: index === 0 ? '#facc15' : index === 1 ? '#cbd5e1' : index === 2 ? '#d97706' : 'var(--primary)'
                 }}
               >
                 #{index + 1}
               </span>
               <div className="flex flex-col">
                 <span className="text-sm text-slate-300">
-                  {completion.user_id || 'Anonymous'}
+                  {completion.username || 'Anonymous'}
                 </span>
-                {completion.total_steps && (
-                  <span className="text-xs text-slate-400">
-                    {completion.total_steps} total moves
-                  </span>
-                )}
               </div>
             </div>
-            <span className="font-semibold" style={{ color: 'var(--text-primary, var(--primary))' }}>
-              {formatTime(completion.total_time_ms)}
+            <span className="font-semibold text-primary">
+              {completion.total_steps} steps
             </span>
           </div>
         ))}
@@ -100,4 +83,3 @@ export default function DailyLeaderboard({ challengeDate }: DailyLeaderboardProp
     </div>
   );
 }
-

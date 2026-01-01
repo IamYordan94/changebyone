@@ -13,18 +13,16 @@ import Leaderboard from './Leaderboard';
 import HintButton from './HintButton';
 import PuzzleSelector from './PuzzleSelector';
 import ProgressIndicator from './ProgressIndicator';
-import PuzzleTimer from './PuzzleTimer';
-import DailyTimer from './DailyTimer';
 import DailyLeaderboard from './DailyLeaderboard';
 import PuzzleLeaderboard from './PuzzleLeaderboard';
 import ChallengeButton from './ChallengeButton';
-import ThemeSwitcher from './ThemeSwitcher';
 import RulesModal from './RulesModal';
-import TimerNotification from './TimerNotification';
 import LeaderboardModal from './LeaderboardModal';
 import MascotAnimation from './MascotAnimation';
 import DatePicker from './DatePicker';
 import ResetConfirmModal from './ResetConfirmModal';
+import MenuDropdown from './MenuDropdown';
+import FAQModal from './FAQModal';
 
 export default function GameBoard() {
   const {
@@ -41,30 +39,16 @@ export default function GameBoard() {
   } = useGame();
   const [hintMessage, setHintMessage] = useState<string | null>(null);
   const [hintsUsedPerPuzzle, setHintsUsedPerPuzzle] = useState<Record<number, number>>({});
-  const [elapsedTime, setElapsedTime] = useState(0);
   const [showResetModal, setShowResetModal] = useState(false);
+  const [showRulesModal, setShowRulesModal] = useState(false);
+  const [showLeaderboardModal, setShowLeaderboardModal] = useState(false);
+  const [showDatePickerModal, setShowDatePickerModal] = useState(false);
+  const [showFAQModal, setShowFAQModal] = useState(false);
 
   // Get active puzzle state
   const activePuzzle = dailyGameState?.puzzles.find(
     p => p.length === activePuzzleLength
   );
-
-  // Calculate cumulative elapsed time for timer notification
-  useEffect(() => {
-    const interval = setInterval(() => {
-      let cumulativeTime = 0;
-      dailyGameState?.puzzles.forEach(puzzle => {
-        if (puzzle.status === 'won' && puzzle.completionTimeMs) {
-          cumulativeTime += puzzle.completionTimeMs;
-        } else if (puzzle.status === 'playing' && puzzle.timerStartTime) {
-          cumulativeTime += Date.now() - puzzle.timerStartTime;
-        }
-      });
-      setElapsedTime(cumulativeTime);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [dailyGameState?.puzzles]);
 
   // Clear hint message when switching puzzles
   useEffect(() => {
@@ -169,15 +153,28 @@ export default function GameBoard() {
       {/* Mascot Animation */}
       <MascotAnimation state={getMascotState()} show={true} />
 
-      {/* Timer Notification - 5 minute reminder */}
-      <TimerNotification elapsedTime={elapsedTime} />
-
       <div className="max-w-5xl mx-auto space-y-8 relative">
-        {/* Controls - Top right corner */}
-        <div className="absolute top-0 right-0 z-40 flex items-center gap-3">
-          <RulesModal />
-          <LeaderboardModal />
-          <ThemeSwitcher />
+        {/* Three-dot menu - Top right corner */}
+        <div className="absolute top-0 right-0 z-40">
+          <MenuDropdown
+            onShowRules={() => setShowRulesModal(true)}
+            onShowLeaderboard={() => setShowLeaderboardModal(true)}
+            onShowDatePicker={() => setShowDatePickerModal(true)}
+            onShowHint={() => {
+              if (activePuzzle && dailyChallenge) {
+                const optimalSteps = dailyChallenge.puzzles.find(p => p.length === activePuzzle.length)?.optimal_steps || 0;
+                const currentHints = hintsUsedPerPuzzle[activePuzzle.length] || 0;
+                if (currentHints < 2) {
+                  // Trigger hint logic here - for now just show a message
+                  setHintMessage('Hint feature coming from menu!');
+                }
+              }
+            }}
+            onShowFAQ={() => setShowFAQModal(true)}
+            onReset={() => setShowResetModal(true)}
+            canReset={activePuzzle?.status === 'playing' || activePuzzle?.status === 'not_started'}
+            canHint={(activePuzzle?.status === 'playing' || activePuzzle?.status === 'not_started') && (hintsUsedPerPuzzle[activePuzzleLength || 0] || 0) < 2}
+          />
         </div>
 
         {/* Header - Change by One */}
@@ -192,24 +189,10 @@ export default function GameBoard() {
             <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
               Transform the starting word into the target word by changing <strong className="text-white">one letter at a time</strong>.
             </p>
-
-            {/* Date Picker */}
-            <div className="flex justify-center mt-4">
-              <DatePicker
-                selectedDate={selectedDate}
-                onDateChange={setSelectedDate}
-                maxDate={new Date().toISOString().split('T')[0]}
-              />
-            </div>
           </div>
         </div>
 
-        {/* Daily Timer - Cumulative across all puzzles */}
-        <DailyTimer
-          puzzles={dailyGameState.puzzles}
-          totalCompletionTimeMs={dailyGameState.totalCompletionTimeMs}
-          isComplete={completedCount === dailyGameState.puzzles.length}
-        />
+
 
         {/* Puzzle Selector with Progress - Compact */}
         <div className="glass rounded-2xl p-5 animate-fade-in-up">
@@ -248,13 +231,8 @@ export default function GameBoard() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center justify-center">
             <MoveCounter moves={activePuzzle.moves} maxMoves={activePuzzle.maxMoves} />
-            <PuzzleTimer
-              startTime={activePuzzle.timerStartTime}
-              completionTimeMs={activePuzzle.completionTimeMs}
-              isActive={activePuzzle.status === 'playing'}
-            />
           </div>
 
           {activePuzzle.errors.length > 0 && (
@@ -300,16 +278,16 @@ export default function GameBoard() {
               <button
                 onClick={() => setShowResetModal(true)}
                 className="px-4 py-2 rounded-xl border border-slate-600/40 hover:border-slate-500/60 transition-all duration-300 flex items-center gap-2 text-slate-300 hover:text-slate-100"
-                title="Reset puzzle (timer continues)"
+                title="Reset puzzle"
               >
-                <svg 
-                  width="18" 
-                  height="18" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
                   strokeLinejoin="round"
                 >
                   <polyline points="23 4 23 10 17 10"></polyline>
@@ -415,6 +393,70 @@ export default function GameBoard() {
         onConfirm={handleReset}
         onCancel={() => setShowResetModal(false)}
       />
+
+      {/* Rules Modal */}
+      {showRulesModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+          <div className="glass rounded-2xl p-6 max-w-2xl max-h-[80vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">How to Play</h2>
+              <button
+                onClick={() => setShowRulesModal(false)}
+                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            <RulesModal />
+          </div>
+        </div>
+      )}
+
+      {/* Leaderboard Modal */}
+      {showLeaderboardModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+          <div className="glass rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Leaderboard</h2>
+              <button
+                onClick={() => setShowLeaderboardModal(false)}
+                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            <LeaderboardModal />
+          </div>
+        </div>
+      )}
+
+      {/* Date Picker Modal */}
+      {showDatePickerModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+          <div className="glass rounded-2xl p-6 max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Select Date</h2>
+              <button
+                onClick={() => setShowDatePickerModal(false)}
+                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+            <DatePicker
+              selectedDate={selectedDate}
+              onDateChange={(date) => {
+                setSelectedDate(date);
+                setShowDatePickerModal(false);
+              }}
+              maxDate={new Date().toISOString().split('T')[0]}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* FAQ Modal */}
+      <FAQModal isOpen={showFAQModal} onClose={() => setShowFAQModal(false)} />
     </div>
   );
 }

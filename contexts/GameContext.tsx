@@ -33,24 +33,24 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activePuzzleLength, setActivePuzzleLength] = useState<number | null>(null);
-  
+
   // Get today's date in YYYY-MM-DD format
   const getTodayDateString = () => {
     const today = new Date();
     return today.toISOString().split('T')[0];
   };
-  
+
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());
-  
+
   // Use refs to check current state without adding to dependencies
   const dailyChallengeRef = useRef<DailyChallenge | null>(null);
   const dailyGameStateRef = useRef<DailyGameState | null>(null);
-  
+
   // Keep refs in sync with state
   useEffect(() => {
     dailyChallengeRef.current = dailyChallenge;
   }, [dailyChallenge]);
-  
+
   useEffect(() => {
     dailyGameStateRef.current = dailyGameState;
   }, [dailyGameState]);
@@ -61,10 +61,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       if (dailyChallengeRef.current && dailyChallengeRef.current.date === selectedDate && dailyGameStateRef.current) {
         return;
       }
-      
+
       setIsLoading(true);
       setError(null);
-      
+
       // Quick check if words are loaded (don't wait if already loaded)
       try {
         const count = getTotalWordCount();
@@ -85,7 +85,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
               attempts++;
             }
           }
-          
+
           if (!wordsReady) {
             throw new Error('Word dictionary not loaded. Please refresh the page.');
           }
@@ -93,32 +93,32 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       } catch {
         throw new Error('Word dictionary not loaded. Please refresh the page.');
       }
-      
+
       // Fetch challenge for selected date from API
       const response = await fetch(`/api/challenges?date=${selectedDate}`);
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'Failed to load daily challenge');
       }
-      
+
       const challenge: DailyChallenge = await response.json();
-      
+
       // Check if response contains an error
       if ((challenge as any).error) {
         throw new Error((challenge as any).error);
       }
-      
+
       setDailyChallenge(challenge);
-      
+
       // If the API returned a different date (fallback to earliest available), update selectedDate
       // The check in loadDailyChallenge will prevent reloading if we already have this challenge
       if (challenge.date !== selectedDate) {
         setSelectedDate(challenge.date);
       }
-      
+
       // Try to load saved game state
       const savedState = loadDailyGameStateFromStorage(challenge.date);
-      
+
       if (savedState && savedState.date === challenge.date) {
         // Ensure all puzzles are present
         if (savedState.puzzles.length === challenge.puzzles.length) {
@@ -157,22 +157,18 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (!puzzleState || (puzzleState.status !== 'playing' && puzzleState.status !== 'not_started')) {
       return;
     }
-    
+
     const newState = submitWordToPuzzle(dailyGameState, puzzleLength, word);
     setDailyGameState(newState);
     saveDailyGameStateToStorage(newState);
 
-    // Submit solution with timer data if puzzle is won
-    const updatedPuzzle = newState.puzzles.find(p => p.length === puzzleLength);
-    if (updatedPuzzle?.status === 'won' && updatedPuzzle.completionTimeMs && dailyChallenge) {
-      try {
-        const puzzleStartTime = updatedPuzzle.timerStartTime 
-          ? new Date(updatedPuzzle.timerStartTime).toISOString()
-          : undefined;
-        const puzzleEndTime = updatedPuzzle.timerStartTime && updatedPuzzle.completionTimeMs
-          ? new Date(updatedPuzzle.timerStartTime + updatedPuzzle.completionTimeMs).toISOString()
-          : undefined;
+    // Get username from localStorage
+    const username = typeof window !== 'undefined' ? localStorage.getItem('username') || undefined : undefined;
 
+    // Submit solution if puzzle is won
+    const updatedPuzzle = newState.puzzles.find(p => p.length === puzzleLength);
+    if (updatedPuzzle?.status === 'won' && dailyChallenge) {
+      try {
         await fetch('/api/solutions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -181,9 +177,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
             word_length: puzzleLength,
             solution_path: updatedPuzzle.wordChain,
             steps: updatedPuzzle.moves,
-            completion_time_ms: updatedPuzzle.completionTimeMs,
-            puzzle_start_time: puzzleStartTime,
-            puzzle_end_time: puzzleEndTime,
+            username,
           }),
         });
       } catch (error) {
@@ -193,18 +187,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
     // Submit daily completion if all puzzles are won
     const allWon = newState.puzzles.every(p => p.status === 'won');
-    if (allWon && newState.totalCompletionTimeMs && dailyChallenge) {
+    if (allWon && dailyChallenge) {
       try {
-        const completionTimes: Record<number, number> = {};
         const solutionPaths: Record<number, string[]> = {};
         let totalSteps = 0;
 
         newState.puzzles.forEach(puzzle => {
-          if (puzzle.completionTimeMs) {
-            completionTimes[puzzle.length] = puzzle.completionTimeMs;
-            solutionPaths[puzzle.length] = puzzle.wordChain;
-            totalSteps += puzzle.moves;
-          }
+          solutionPaths[puzzle.length] = puzzle.wordChain;
+          totalSteps += puzzle.moves;
         });
 
         await fetch('/api/completions', {
@@ -212,29 +202,27 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             challenge_date: dailyChallenge.date,
-            total_time_ms: newState.totalCompletionTimeMs,
-            completion_times: completionTimes,
             solution_paths: solutionPaths,
             total_steps: totalSteps,
+            username,
           }),
         });
 
         // Check if user is in a challenge and submit
         const challengeCode = localStorage.getItem('activeChallengeCode');
         if (challengeCode) {
-          const sessionId = localStorage.getItem(`challenge_${challengeCode}`) || 
-                          `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          
+          const sessionId = localStorage.getItem(`challenge_${challengeCode}`) ||
+            `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
           await fetch('/api/challenges/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               challenge_code: challengeCode,
               session_id: sessionId,
-              total_time_ms: newState.totalCompletionTimeMs,
-              completion_times: completionTimes,
               solution_paths: solutionPaths,
               total_steps: totalSteps,
+              username,
             }),
           });
         }
@@ -248,9 +236,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (!dailyGameState) {
       return;
     }
-    
-    // Preserve timer when resetting (timer continues running)
-    const newState = resetPuzzle(dailyGameState, puzzleLength, true);
+
+    const newState = resetPuzzle(dailyGameState, puzzleLength, false);
     setDailyGameState(newState);
     saveDailyGameStateToStorage(newState);
   }, [dailyGameState]);

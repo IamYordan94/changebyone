@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import WordLoader from "@/components/WordLoader";
-import { ThemeProvider } from "@/contexts/ThemeContext";
 import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
@@ -17,11 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeProvider>
-          <WordLoader />
-          {children}
-          <SiteFooter />
-        </ThemeProvider>
+        <WordLoader />
+        {children}
+        <SiteFooter />
       </body>
     </html>
   );
