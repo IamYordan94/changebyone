@@ -18,7 +18,6 @@ import PuzzleLeaderboard from './PuzzleLeaderboard';
 import ChallengeButton from './ChallengeButton';
 import RulesModal from './RulesModal';
 import LeaderboardModal from './LeaderboardModal';
-import MascotAnimation from './MascotAnimation';
 import DatePicker from './DatePicker';
 import ResetConfirmModal from './ResetConfirmModal';
 import MenuDropdown from './MenuDropdown';
@@ -150,9 +149,6 @@ export default function GameBoard() {
 
   return (
     <div className="min-h-screen py-4 md:py-12 px-2 md:px-4 animate-fade-in-up">
-      {/* Mascot Animation */}
-      <MascotAnimation state={getMascotState()} show={true} />
-
       <div className="max-w-5xl mx-auto space-y-4 md:space-y-8 relative">
         {/* Three-dot menu - Top right corner */}
         <div className="absolute top-0 right-0 z-40">
@@ -231,9 +227,7 @@ export default function GameBoard() {
             </div>
           </div>
 
-          <div className="flex items-center justify-center">
-            <MoveCounter moves={activePuzzle.moves} maxMoves={activePuzzle.maxMoves} />
-          </div>
+
 
           {activePuzzle.errors.length > 0 && (
             <FeedbackMessage
@@ -256,63 +250,7 @@ export default function GameBoard() {
             />
           )}
 
-          <div className="flex gap-3 justify-center flex-wrap">
-            <HintButton
-              gameState={{
-                currentWord: activePuzzle.currentWord,
-                targetWord: activePuzzle.end_word,
-                wordChain: activePuzzle.wordChain,
-                moves: activePuzzle.moves,
-                maxMoves: activePuzzle.maxMoves,
-                status: activePuzzle.status === 'won' ? 'won' : activePuzzle.status === 'lost' ? 'lost' : 'playing',
-                difficulty: 'medium',
-                dailyChallengeDate: dailyGameState.date,
-                errors: activePuzzle.errors,
-              }}
-              onHint={handleHint}
-              hintsRemaining={hintsRemaining}
-              startWord={activePuzzle.start_word}
-              optimalSteps={dailyChallenge?.puzzles.find(p => p.length === activePuzzle.length)?.optimal_steps || 0}
-            />
-            {(activePuzzle.status === 'playing' || activePuzzle.status === 'not_started') && (
-              <button
-                onClick={() => setShowResetModal(true)}
-                className="px-4 py-2 rounded-xl border border-slate-600/40 hover:border-slate-500/60 transition-all duration-300 flex items-center gap-2 text-slate-300 hover:text-slate-100"
-                title="Reset puzzle"
-              >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="23 4 23 10 17 10"></polyline>
-                  <polyline points="1 20 1 14 7 14"></polyline>
-                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                </svg>
-                <span className="font-medium">Reset</span>
-              </button>
-            )}
-            {activePuzzle.status === 'won' && (
-              <ShareButton
-                gameState={{
-                  currentWord: activePuzzle.currentWord,
-                  targetWord: activePuzzle.end_word,
-                  wordChain: activePuzzle.wordChain,
-                  moves: activePuzzle.moves,
-                  maxMoves: activePuzzle.maxMoves,
-                  status: 'won',
-                  difficulty: 'medium',
-                  dailyChallengeDate: dailyGameState.date,
-                  errors: [],
-                }}
-              />
-            )}
-          </div>
+
 
           {/* Next Challenge Button */}
           {activePuzzle.status === 'won' && (() => {
@@ -359,104 +297,158 @@ export default function GameBoard() {
 
           <WordChain chain={activePuzzle.wordChain} />
 
-          <WordInput
-            onSubmit={handleSubmitWord}
-            disabled={isGameOver}
-            currentLength={activePuzzle.currentWord.length}
-          />
-        </div>
+        </ WordInput>
 
-        {/* Challenge Button */}
-        {completedCount === dailyGameState.puzzles.length && dailyChallenge && (
-          <div className="glass rounded-3xl p-8 animate-fade-in-up">
-            <h3 className="text-xl font-bold mb-6 text-slate-200 text-center">
-              Challenge Your Friends! 🎯
-            </h3>
-            <ChallengeButton challengeDate={dailyChallenge.date} />
-          </div>
-        )}
+        {/* Bottom Controls - Moves, Hint, Reset */}
+        <div className="flex items-center justify-between flex-wrap gap-3 pt-4 border-t border-slate-700/50">
+          <MoveCounter moves={activePuzzle.moves} maxMoves={activePuzzle.maxMoves} />
 
-
-        {/* Challenge of the Day - Bottom of Page */}
-        <div className="mt-12 text-center pb-6">
-          <div className="inline-block px-5 py-2 bg-slate-900/70 backdrop-blur-md rounded-full border shadow-lg" style={{ borderColor: 'color-mix(in srgb, var(--primary) 30%, transparent)' }}>
-            <p className="text-slate-400 text-xs font-medium tracking-wide">
-              Challenge of the Day • {dailyChallenge?.date || 'Loading...'}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Reset Confirmation Modal */}
-      <ResetConfirmModal
-        isOpen={showResetModal}
-        onConfirm={handleReset}
-        onCancel={() => setShowResetModal(false)}
-      />
-
-      {/* Rules Modal */}
-      {showRulesModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-          <div className="glass rounded-2xl p-6 max-w-2xl max-h-[80vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">How to Play</h2>
-              <button
-                onClick={() => setShowRulesModal(false)}
-                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-            <RulesModal />
-          </div>
-        </div>
-      )}
-
-      {/* Leaderboard Modal */}
-      {showLeaderboardModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-          <div className="glass rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">Leaderboard</h2>
-              <button
-                onClick={() => setShowLeaderboardModal(false)}
-                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-            <LeaderboardModal />
-          </div>
-        </div>
-      )}
-
-      {/* Date Picker Modal */}
-      {showDatePickerModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-          <div className="glass rounded-2xl p-6 max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">Select Date</h2>
-              <button
-                onClick={() => setShowDatePickerModal(false)}
-                className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-            <DatePicker
-              selectedDate={selectedDate}
-              onDateChange={(date) => {
-                setSelectedDate(date);
-                setShowDatePickerModal(false);
+          <div className="flex gap-2">
+            <HintButton
+              gameState={{
+                currentWord: activePuzzle.currentWord,
+                targetWord: activePuzzle.end_word,
+                wordChain: activePuzzle.wordChain,
+                moves: activePuzzle.moves,
+                maxMoves: activePuzzle.maxMoves,
+                status: activePuzzle.status === 'won' ? 'won' : activePuzzle.status === 'lost' ? 'lost' : 'playing',
+                difficulty: 'medium',
+                dailyChallengeDate: dailyGameState.date,
+                errors: activePuzzle.errors,
               }}
-              maxDate={new Date().toISOString().split('T')[0]}
+              onHint={handleHint}
+              hintsRemaining={hintsRemaining}
+              startWord={activePuzzle.start_word}
+              optimalSteps={dailyChallenge?.puzzles.find(p => p.length === activePuzzle.length)?.optimal_steps || 0}
+            />
+            {(activePuzzle.status === 'playing' || activePuzzle.status === 'not_started') && (
+              <button
+                onClick={() => setShowResetModal(true)}
+                className="px-3 py-2 rounded-lg border border-slate-600/40 hover:border-slate-500/60 transition-colors text-sm"
+                title="Reset puzzle"
+              >
+                Reset
+              </button>
+            )}
+          </div>
+        </div>
+
+        {activePuzzle.status === 'won' && (
+          <div className="flex justify-center pt-2">
+            <ShareButton
+              gameState={{
+                currentWord: activePuzzle.currentWord,
+                targetWord: activePuzzle.end_word,
+                wordChain: activePuzzle.wordChain,
+                moves: activePuzzle.moves,
+                maxMoves: activePuzzle.maxMoves,
+                status: 'won',
+                difficulty: 'medium',
+                dailyChallengeDate: dailyGameState.date,
+                errors: [],
+              }}
             />
           </div>
+        )}
+      </div>
+
+      {/* Challenge Button */}
+      {completedCount === dailyGameState.puzzles.length && dailyChallenge && (
+        <div className="glass rounded-3xl p-8 animate-fade-in-up">
+          <h3 className="text-xl font-bold mb-6 text-slate-200 text-center">
+            Challenge Your Friends! 🎯
+          </h3>
+          <ChallengeButton challengeDate={dailyChallenge.date} />
         </div>
       )}
 
-      {/* FAQ Modal */}
-      <FAQModal isOpen={showFAQModal} onClose={() => setShowFAQModal(false)} />
+
+      {/* Challenge of the Day - Bottom of Page */}
+      <div className="mt-12 text-center pb-6">
+        <div className="inline-block px-5 py-2 bg-slate-900/70 backdrop-blur-md rounded-full border shadow-lg" style={{ borderColor: 'color-mix(in srgb, var(--primary) 30%, transparent)' }}>
+          <p className="text-slate-400 text-xs font-medium tracking-wide">
+            Challenge of the Day • {dailyChallenge?.date || 'Loading...'}
+          </p>
+        </div>
+      </div>
     </div>
+
+      {/* Reset Confirmation Modal */ }
+  <ResetConfirmModal
+    isOpen={showResetModal}
+    onConfirm={handleReset}
+    onCancel={() => setShowResetModal(false)}
+  />
+
+  {/* Rules Modal */ }
+  {
+    showRulesModal && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+        <div className="glass rounded-2xl p-6 max-w-2xl max-h-[80vh] overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">How to Play</h2>
+            <button
+              onClick={() => setShowRulesModal(false)}
+              className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+          <RulesModal />
+        </div>
+      </div>
+    )
+  }
+
+  {/* Leaderboard Modal */ }
+  {
+    showLeaderboardModal && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+        <div className="glass rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Leaderboard</h2>
+            <button
+              onClick={() => setShowLeaderboardModal(false)}
+              className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+          <LeaderboardModal />
+        </div>
+      </div>
+    )
+  }
+
+  {/* Date Picker Modal */ }
+  {
+    showDatePickerModal && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+        <div className="glass rounded-2xl p-6 max-w-md">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Select Date</h2>
+            <button
+              onClick={() => setShowDatePickerModal(false)}
+              className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+          <DatePicker
+            selectedDate={selectedDate}
+            onDateChange={(date) => {
+              setSelectedDate(date);
+              setShowDatePickerModal(false);
+            }}
+            maxDate={new Date().toISOString().split('T')[0]}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  {/* FAQ Modal */ }
+  <FAQModal isOpen={showFAQModal} onClose={() => setShowFAQModal(false)} />
+    </div >
   );
 }
