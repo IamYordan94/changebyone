@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, KeyboardEvent } from 'react';
+import { useState, KeyboardEvent, useRef } from 'react';
 
 interface WordInputProps {
   onSubmit: (word: string) => void;
@@ -10,12 +10,17 @@ interface WordInputProps {
 
 export default function WordInput({ onSubmit, disabled, currentLength }: WordInputProps) {
   const [input, setInput] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
     const trimmed = input.trim().toLowerCase();
     if (trimmed.length === currentLength && !disabled) {
       onSubmit(trimmed);
       setInput('');
+      // Keep focus on input so keyboard stays open
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
     }
   };
 
@@ -29,6 +34,7 @@ export default function WordInput({ onSubmit, disabled, currentLength }: WordInp
     <div className="flex flex-col items-center gap-6">
       <div className="relative w-full max-w-lg group">
         <input
+          ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => {
