@@ -70,7 +70,7 @@ export default function UsernameModal({ isOpen, onClose }: UsernameModalProps) {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="YOUR USERNAME"
-                            className="w-full uppercase"
+                            className="w-full uppercase bg-slate-800/50 text-white placeholder-slate-400 border-2 border-slate-600 focus:border-primary rounded-lg px-4 py-3"
                             autoFocus
                             maxLength={20}
                         />
