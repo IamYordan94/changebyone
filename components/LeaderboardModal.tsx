@@ -8,11 +8,10 @@ type MyDayStats = {
   puzzles: Array<{
     word_length: number;
     steps: number;
-    completion_time_ms?: number;
     status: PuzzleGameState['status'];
   }>;
-  completedCount: number;
-  totalTimeMs: number;
+  completed: boolean;
+  total_steps: number;
 };
 
 export default function LeaderboardModal() {
@@ -88,19 +87,18 @@ export default function LeaderboardModal() {
         .map((p) => ({
           word_length: p.length,
           steps: p.moves,
-          completion_time_ms: p.completionTimeMs,
           status: p.status,
         }))
         .sort((a, b) => a.word_length - b.word_length);
 
       const completedCount = puzzles.filter((p) => p.status === 'won').length;
-      const totalTimeMs = puzzles.reduce((sum, p) => sum + (p.completion_time_ms || 0), 0);
+      const totalSteps = puzzles.reduce((sum, p) => sum + p.steps, 0);
 
       return {
         date: state.date,
         puzzles,
-        completedCount,
-        totalTimeMs,
+        completed: completedCount === state.puzzles.length,
+        total_steps: totalSteps,
       };
     });
 
@@ -130,11 +128,11 @@ export default function LeaderboardModal() {
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in-up">
           {/* Backdrop */}
-          <div 
+          <div
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
           />
-          
+
           {/* Modal Content */}
           <div className="relative glass rounded-3xl p-8 max-w-4xl w-full max-h-[80vh] overflow-hidden flex flex-col">
             <button
@@ -150,11 +148,10 @@ export default function LeaderboardModal() {
             <div className="flex gap-2 mb-6">
               <button
                 onClick={() => setActiveTab('my')}
-                className={`px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 ${
-                  activeTab === 'my'
-                    ? 'text-white shadow-lg'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/30'
-                }`}
+                className={`px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 ${activeTab === 'my'
+                  ? 'text-white shadow-lg'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/30'
+                  }`}
                 style={activeTab === 'my' ? {
                   background: 'linear-gradient(to right, var(--primary), var(--secondary))'
                 } : undefined}
@@ -163,11 +160,10 @@ export default function LeaderboardModal() {
               </button>
               <button
                 onClick={() => setActiveTab('global')}
-                className={`px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 ${
-                  activeTab === 'global'
-                    ? 'text-white shadow-lg'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/30'
-                }`}
+                className={`px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 ${activeTab === 'global'
+                  ? 'text-white shadow-lg'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/30'
+                  }`}
                 style={activeTab === 'global' ? {
                   background: 'linear-gradient(to right, var(--primary), var(--secondary))'
                 } : undefined}
@@ -202,9 +198,9 @@ export default function LeaderboardModal() {
                         <div className="flex items-center justify-between mb-4">
                           <h3 className="text-lg font-bold text-slate-200">{day.date}</h3>
                           <div className="text-right">
-                            <div className="text-xs text-slate-400">{day.completedCount}/6 puzzles</div>
-                            {day.totalTimeMs > 0 && (
-                              <div className="text-xs text-slate-400">Total: {formatTime(day.totalTimeMs)}</div>
+                            <div className="text-xs text-slate-400">{day.completed ? '6/6' : `${day.puzzles.filter(p => p.status === 'won').length}/6`} puzzles</div>
+                            {day.total_steps > 0 && (
+                              <div className="text-xs text-slate-400">Total: {day.total_steps} steps</div>
                             )}
                           </div>
                         </div>
@@ -217,10 +213,10 @@ export default function LeaderboardModal() {
                             >
                               <div className="text-xs text-slate-400 mb-1 flex items-center justify-between">
                                 <span>{p.word_length} Letters</span>
-                                {p.status === 'won' && p.completion_time_ms !== undefined ? (
-                                  <span>{formatTime(p.completion_time_ms)}</span>
+                                {p.status === 'won' ? (
+                                  <span className="text-green-400">{p.steps} steps</span>
                                 ) : (
-                                  <span className="text-slate-500">{p.status === 'not_started' ? '' : p.status}</span>
+                                  <span className="text-slate-500">{p.status === 'not_started' ? '—' : p.status}</span>
                                 )}
                               </div>
                               <div className="font-bold text-slate-200">{p.steps} moves</div>
@@ -263,11 +259,11 @@ export default function LeaderboardModal() {
                               </span>
                               <div className="flex-1">
                                 <div className="text-slate-200 font-semibold text-lg">
-                                  {formatTime(completion.total_time_ms)}
+                                  {completion.total_steps} steps
                                 </div>
                                 <div className="text-xs text-slate-400 mt-0.5">
                                   {completion.challenge_date}
-                                  {completion.total_steps && ` • ${completion.total_steps} moves`}
+                                  {completion.username && ` • ${completion.username}`}
                                 </div>
                               </div>
                             </div>
