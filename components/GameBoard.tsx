@@ -229,26 +229,7 @@ export default function GameBoard() {
 
 
 
-          {activePuzzle.errors.length > 0 && (
-            <FeedbackMessage
-              type="error"
-              message={activePuzzle.errors[activePuzzle.errors.length - 1]}
-            />
-          )}
 
-          {activePuzzle.status === 'won' && (
-            <FeedbackMessage
-              type="success"
-              message={`🎉 Congratulations! You solved it in ${activePuzzle.moves} moves!`}
-            />
-          )}
-
-          {activePuzzle.status === 'lost' && (
-            <FeedbackMessage
-              type="error"
-              message="Out of moves! Better luck tomorrow."
-            />
-          )}
 
 
 
@@ -296,6 +277,28 @@ export default function GameBoard() {
           )}
 
           <WordChain chain={activePuzzle.wordChain} />
+
+          {/* Error/Success Messages - Right above input */}
+          {activePuzzle.errors.length > 0 && (
+            <FeedbackMessage
+              type="error"
+              message={activePuzzle.errors[activePuzzle.errors.length - 1]}
+            />
+          )}
+
+          {activePuzzle.status === 'won' && (
+            <FeedbackMessage
+              type="success"
+              message={`🎉 Congratulations! You solved it in ${activePuzzle.moves} moves!`}
+            />
+          )}
+
+          {activePuzzle.status === 'lost' && (
+            <FeedbackMessage
+              type="error"
+              message="Out of moves! Better luck tomorrow."
+            />
+          )}
 
           <WordInput
             onSubmit={handleSubmitWord}
