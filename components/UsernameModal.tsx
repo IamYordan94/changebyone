@@ -54,12 +54,9 @@ export default function UsernameModal({ isOpen, onClose }: UsernameModalProps) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <div className="absolute inset-0 modal-backdrop" />
-
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm">
             {/* Modal Content */}
-            <div className="relative modal-content p-8 max-w-md w-full">
+            <div className="relative glass rounded-2xl p-8 max-w-md w-full shadow-2xl">
                 <h2 className="text-3xl font-black mb-6 uppercase">Welcome</h2>
 
                 <p className="mb-6 font-semibold">
@@ -85,7 +82,7 @@ export default function UsernameModal({ isOpen, onClose }: UsernameModalProps) {
                     <div className="flex flex-col gap-3">
                         <button
                             type="submit"
-                            className="w-full primary"
+                            className="w-full bg-primary hover:bg-secondary transition-colors"
                             disabled={username.length < 2}
                         >
                             Start Playing
