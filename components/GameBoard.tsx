@@ -278,7 +278,13 @@ export default function GameBoard() {
 
           <WordChain chain={activePuzzle.wordChain} />
 
-          {/* Error/Success Messages - Right above input */}
+          <WordInput
+            onSubmit={handleSubmitWord}
+            disabled={isGameOver}
+            currentLength={activePuzzle.currentWord.length}
+          />
+
+          {/* Error/Success Messages - Below input */}
           {activePuzzle.errors.length > 0 && (
             <FeedbackMessage
               type="error"
@@ -299,12 +305,6 @@ export default function GameBoard() {
               message="Out of moves! Better luck tomorrow."
             />
           )}
-
-          <WordInput
-            onSubmit={handleSubmitWord}
-            disabled={isGameOver}
-            currentLength={activePuzzle.currentWord.length}
-          />
 
           {/* Bottom Controls - Moves, Hint, Reset */}
           <div className="flex items-center justify-between flex-wrap gap-3 pt-4 border-t border-slate-700/50">
