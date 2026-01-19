@@ -16,9 +16,10 @@ import ProgressIndicator from './ProgressIndicator';
 import DailyLeaderboard from './DailyLeaderboard';
 import PuzzleLeaderboard from './PuzzleLeaderboard';
 import ChallengeButton from './ChallengeButton';
-import RulesModal from './RulesModal';
+import RulesModalContent from './RulesModalContent';
 import LeaderboardModal from './LeaderboardModal';
 import DatePicker from './DatePicker';
+import DatePickerModal from './DatePickerModal';
 import ResetConfirmModal from './ResetConfirmModal';
 import MenuDropdown from './MenuDropdown';
 import FAQModal from './FAQModal';
@@ -388,71 +389,68 @@ export default function GameBoard() {
       />
 
       {/* Rules Modal */}
-      {
-        showRulesModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-            <div className="glass rounded-2xl p-6 max-w-2xl max-h-[80vh] overflow-y-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">How to Play</h2>
-                <button
-                  onClick={() => setShowRulesModal(false)}
-                  className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              <RulesModal />
+      {showRulesModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80">
+          <div className="glass rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 max-w-2xl w-full mx-2 sm:mx-4 max-h-[90vh] sm:max-h-[85vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">How to Play</h2>
+              <button
+                onClick={() => setShowRulesModal(false)}
+                className="p-1.5 sm:p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-xl sm:text-2xl w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"
+                aria-label="Close"
+              >
+                ✕
+              </button>
             </div>
+            <RulesModalContent />
           </div>
-        )
-      }
+        </div>
+      )}
 
       {/* Leaderboard Modal */}
-      {
-        showLeaderboardModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-            <div className="glass rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-y-auto w-full">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Leaderboard</h2>
-                <button
-                  onClick={() => setShowLeaderboardModal(false)}
-                  className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              <LeaderboardModal />
+      {showLeaderboardModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80">
+          <div className="glass rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-4xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto w-full mx-2 sm:mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl sm:text-2xl font-bold">Leaderboard</h2>
+              <button
+                onClick={() => setShowLeaderboardModal(false)}
+                className="p-1.5 sm:p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-xl sm:text-2xl w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"
+                aria-label="Close"
+              >
+                ✕
+              </button>
             </div>
+            <LeaderboardModal />
           </div>
-        )
-      }
+        </div>
+      )}
 
       {/* Date Picker Modal */}
-      {
-        showDatePickerModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
-            <div className="glass rounded-2xl p-6 max-w-md">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold">Select Date</h2>
-                <button
-                  onClick={() => setShowDatePickerModal(false)}
-                  className="p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              <DatePicker
-                selectedDate={selectedDate}
-                onDateChange={(date) => {
-                  setSelectedDate(date);
-                  setShowDatePickerModal(false);
-                }}
-                maxDate={new Date().toISOString().split('T')[0]}
-              />
+      {showDatePickerModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80">
+          <div className="glass rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-md w-full mx-2 sm:mx-4">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl sm:text-2xl font-bold">Select Date</h2>
+              <button
+                onClick={() => setShowDatePickerModal(false)}
+                className="p-1.5 sm:p-2 hover:bg-slate-700/50 rounded-lg transition-colors text-xl sm:text-2xl w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"
+                aria-label="Close"
+              >
+                ✕
+              </button>
             </div>
+            <DatePickerModal
+              selectedDate={selectedDate}
+              onDateChange={(date) => {
+                setSelectedDate(date);
+                setShowDatePickerModal(false);
+              }}
+              maxDate={new Date().toISOString().split('T')[0]}
+            />
           </div>
-        )
-      }
+        </div>
+      )}
 
       {/* FAQ Modal */}
       <FAQModal isOpen={showFAQModal} onClose={() => setShowFAQModal(false)} />

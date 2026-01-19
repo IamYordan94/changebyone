@@ -125,19 +125,22 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           setDailyGameState(savedState);
           // Set active puzzle to first incomplete one, or first puzzle
           const incompletePuzzle = savedState.puzzles.find(p => p.status !== 'won');
-          setActivePuzzleLength(incompletePuzzle?.length || challenge.puzzles[0].length);
+          const defaultLength = challenge.puzzles.length > 0 ? challenge.puzzles[0].length : null;
+          setActivePuzzleLength(incompletePuzzle?.length || defaultLength);
         } else {
           // Puzzles don't match, reinitialize
           const newState = initializeDailyGameState(challenge.date, challenge.puzzles);
           setDailyGameState(newState);
-          setActivePuzzleLength(challenge.puzzles[0].length);
+          const defaultLength = challenge.puzzles.length > 0 ? challenge.puzzles[0].length : null;
+          setActivePuzzleLength(defaultLength);
           saveDailyGameStateToStorage(newState);
         }
       } else {
         // Initialize new game state
         const newState = initializeDailyGameState(challenge.date, challenge.puzzles);
         setDailyGameState(newState);
-        setActivePuzzleLength(challenge.puzzles[0].length);
+        const defaultLength = challenge.puzzles.length > 0 ? challenge.puzzles[0].length : null;
+        setActivePuzzleLength(defaultLength);
         saveDailyGameStateToStorage(newState);
       }
     } catch (err) {
