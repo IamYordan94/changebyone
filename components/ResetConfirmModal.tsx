@@ -11,7 +11,7 @@ export default function ResetConfirmModal({
   isOpen,
   onConfirm,
   onCancel,
-  message = 'Are you sure you want to reset this puzzle? Your word chain will be cleared, but the timer will continue running.'
+  message = 'Are you sure you want to reset this puzzle? Your word chain will be cleared.'
 }: ResetConfirmModalProps) {
   if (!isOpen) return null;
 
@@ -49,10 +49,6 @@ export default function ResetConfirmModal({
             <li className="flex items-center gap-2">
               <span className="text-red-400 flex-shrink-0">•</span>
               <span>Move counter (back to 0)</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-green-400 flex-shrink-0">✓</span>
-              <span>Timer (continues running)</span>
             </li>
           </ul>
         </div>

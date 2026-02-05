@@ -31,8 +31,8 @@ export default function WordInput({ onSubmit, disabled, currentLength }: WordInp
   };
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <div className="relative w-full max-w-lg group">
+    <div className="flex items-center justify-center gap-2 w-full max-w-lg">
+      <div className="relative flex-1 group">
         <input
           ref={inputRef}
           type="text"
@@ -66,7 +66,7 @@ export default function WordInput({ onSubmit, disabled, currentLength }: WordInp
       <button
         onClick={handleSubmit}
         disabled={disabled || input.length !== currentLength}
-        className="px-10 py-4 text-white font-bold text-lg rounded-2xl disabled:cursor-not-allowed transition-all duration-300 shadow-lg disabled:shadow-none transform hover:scale-105 active:scale-95"
+        className="w-12 h-12 md:w-14 md:h-14 flex items-center justify-center text-white font-bold text-xl md:text-2xl rounded-2xl disabled:cursor-not-allowed transition-all duration-300 shadow-lg disabled:shadow-none transform hover:scale-105 active:scale-95 flex-shrink-0"
         style={{
           background: disabled ? 'linear-gradient(to right, #334155, #334155, #334155)' : `linear-gradient(to right, var(--primary), var(--secondary), var(--accent))`,
           boxShadow: disabled ? 'none' : undefined
@@ -79,8 +79,9 @@ export default function WordInput({ onSubmit, disabled, currentLength }: WordInp
         onMouseLeave={(e) => {
           e.currentTarget.style.filter = 'brightness(1)';
         }}
+        aria-label="Submit word"
       >
-        Submit Word
+        Go
       </button>
     </div>
   );

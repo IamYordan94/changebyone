@@ -282,11 +282,13 @@ export default function GameBoard() {
 
           <WordChain chain={activePuzzle.wordChain} />
 
-          <WordInput
-            onSubmit={handleSubmitWord}
-            disabled={isGameOver}
-            currentLength={activePuzzle.currentWord.length}
-          />
+          <div className="flex justify-center w-full">
+            <WordInput
+              onSubmit={handleSubmitWord}
+              disabled={isGameOver}
+              currentLength={activePuzzle.currentWord.length}
+            />
+          </div>
 
           {/* Error/Success Messages - Below input */}
           {activePuzzle.errors.length > 0 && (
