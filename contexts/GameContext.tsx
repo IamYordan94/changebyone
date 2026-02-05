@@ -65,32 +65,29 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(true);
       setError(null);
 
-      // Quick check if words are loaded (don't wait if already loaded)
+      // Wait for word dictionary to be loaded (WordLoader runs in layout; may not be ready yet)
       try {
-        const count = getTotalWordCount();
+        let count = getTotalWordCount();
         if (count === 0) {
-          // Words not loaded yet, wait briefly
-          let wordsReady = false;
-          let attempts = 0;
-          while (!wordsReady && attempts < 10) {
-            await new Promise(resolve => setTimeout(resolve, 100));
+          const maxAttempts = 40;
+          const delayMs = 150;
+          for (let attempt = 0; attempt < maxAttempts; attempt++) {
+            await new Promise(resolve => setTimeout(resolve, delayMs));
             try {
-              const checkCount = getTotalWordCount();
-              if (checkCount > 0) {
-                wordsReady = true;
-              } else {
-                attempts++;
-              }
+              count = getTotalWordCount();
+              if (count > 0) break;
             } catch {
-              attempts++;
+              // keep waiting
             }
           }
-
-          if (!wordsReady) {
+          if (count === 0) {
             throw new Error('Word dictionary not loaded. Please refresh the page.');
           }
         }
-      } catch {
+      } catch (err) {
+        if (err instanceof Error && err.message.includes('Word dictionary not loaded')) {
+          throw err;
+        }
         throw new Error('Word dictionary not loaded. Please refresh the page.');
       }
 

@@ -46,7 +46,7 @@ export default function WordInput({ onSubmit, disabled, currentLength }: WordInp
           onKeyPress={handleKeyPress}
           disabled={disabled}
           placeholder={`Enter ${currentLength}-letter word`}
-          className="w-full px-8 py-5 text-3xl text-center font-bold glass rounded-2xl focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed text-white placeholder-slate-500 transition-all duration-300"
+          className="w-full px-4 py-3 text-xl md:text-2xl text-center font-bold glass rounded-2xl focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed text-white placeholder-slate-500 transition-all duration-300"
           style={{
             '--tw-ring-color': 'color-mix(in srgb, var(--primary) 50%, transparent)',
           } as React.CSSProperties}

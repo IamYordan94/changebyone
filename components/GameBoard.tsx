@@ -149,8 +149,8 @@ export default function GameBoard() {
   };
 
   return (
-    <div className="min-h-screen py-4 md:py-12 px-2 md:px-4 animate-fade-in-up">
-      <div className="max-w-5xl mx-auto space-y-4 md:space-y-8 relative">
+    <div className="min-h-screen py-2 md:py-6 px-2 md:px-4 animate-fade-in-up">
+      <div className="max-w-5xl mx-auto space-y-3 md:space-y-5 relative">
         {/* Three-dot menu - Top right corner */}
         <div className="absolute top-0 right-0 z-40">
           <MenuDropdown
@@ -175,15 +175,15 @@ export default function GameBoard() {
         </div>
 
         {/* Header - Change by One */}
-        <div className="text-center mb-10">
-          <div className="space-y-4">
+        <div className="text-center mb-4">
+          <div className="space-y-2">
             {/* Main Title */}
-            <h1 className="text-5xl md:text-6xl font-black tracking-tight text-gradient">
-              Change<span className="text-2xl md:text-3xl mx-1 md:mx-2">by</span>One
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight text-gradient">
+              Change<span className="text-lg md:text-xl mx-1">by</span>One
             </h1>
 
             {/* Objective - Always Visible */}
-            <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+            <p className="text-slate-300 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
               Transform the starting word into the target word by changing <strong className="text-white">one letter at a time</strong>.
             </p>
           </div>
@@ -192,8 +192,8 @@ export default function GameBoard() {
 
 
         {/* Puzzle Selector with Progress - Compact */}
-        <div className="glass rounded-2xl p-5 animate-fade-in-up">
-          <div className="flex items-center justify-between mb-4">
+        <div className="glass rounded-2xl p-3 animate-fade-in-up">
+          <div className="flex items-center justify-between mb-2">
             <h2 className="text-base font-bold text-slate-200">
               Select Puzzle
             </h2>
@@ -212,19 +212,22 @@ export default function GameBoard() {
         </div>
 
         {/* Main Game Card - Enhanced */}
-        <div className="glass rounded-3xl p-10 space-y-8 shadow-2xl animate-fade-in-up transition-all duration-500">
-          <div className="text-center mb-6">
-            <h2 className="text-3xl font-black text-white mb-3">
-              {activePuzzle.length}-Letter Puzzle
-            </h2>
-            <div className="flex items-center justify-center gap-3 flex-wrap">
-              <span className="px-4 py-2 rounded-xl font-bold text-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--primary) 20%, transparent)', borderWidth: '1px', borderColor: 'color-mix(in srgb, var(--primary) 30%, transparent)', color: 'var(--text-primary, var(--primary))' }}>
-                {activePuzzle.start_word.toUpperCase()}
-              </span>
-              <span className="text-2xl text-slate-400">→</span>
-              <span className="px-4 py-2 rounded-xl font-bold text-lg" style={{ backgroundColor: 'color-mix(in srgb, var(--secondary) 20%, transparent)', borderWidth: '1px', borderColor: 'color-mix(in srgb, var(--secondary) 30%, transparent)', color: 'var(--text-secondary, var(--secondary))' }}>
-                {activePuzzle.end_word.toUpperCase()}
-              </span>
+        <div className="glass rounded-3xl p-4 sm:p-6 space-y-5 shadow-2xl animate-fade-in-up transition-all duration-500">
+          {/* Sticky start/target row on mobile so it stays visible when keyboard opens */}
+          <div className="sticky top-0 z-30 md:static bg-slate-900/95 border-b border-slate-700 -mx-4 sm:-mx-6 px-4 sm:px-6 py-2 sm:py-3 md:border-0 md:bg-transparent md:py-0">
+            <div className="text-center mb-2 md:mb-2">
+              <h2 className="text-xl md:text-2xl font-black text-white mb-2">
+                {activePuzzle.length}-Letter Puzzle
+              </h2>
+              <div className="flex items-center justify-center gap-2 flex-wrap">
+                <span className="px-3 py-1.5 rounded-xl font-bold text-base" style={{ backgroundColor: 'color-mix(in srgb, var(--primary) 20%, transparent)', borderWidth: '1px', borderColor: 'color-mix(in srgb, var(--primary) 30%, transparent)', color: 'var(--text-primary, var(--primary))' }}>
+                  {activePuzzle.start_word.toUpperCase()}
+                </span>
+                <span className="text-xl text-slate-400">→</span>
+                <span className="px-3 py-1.5 rounded-xl font-bold text-base" style={{ backgroundColor: 'color-mix(in srgb, var(--secondary) 20%, transparent)', borderWidth: '1px', borderColor: 'color-mix(in srgb, var(--secondary) 30%, transparent)', color: 'var(--text-secondary, var(--secondary))' }}>
+                  {activePuzzle.end_word.toUpperCase()}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -308,7 +311,7 @@ export default function GameBoard() {
           )}
 
           {/* Bottom Controls - Moves, Hint, Reset */}
-          <div className="flex items-center justify-between flex-wrap gap-3 pt-4 border-t border-slate-700/50">
+          <div className="flex items-center justify-between flex-wrap gap-2 pt-2 border-t border-slate-700/50">
             <MoveCounter moves={activePuzzle.moves} maxMoves={activePuzzle.maxMoves} />
 
             <div className="flex gap-2">
@@ -372,7 +375,7 @@ export default function GameBoard() {
 
 
         {/* Challenge of the Day - Bottom of Page */}
-        <div className="mt-12 text-center pb-6">
+        <div className="mt-6 text-center pb-4">
           <div className="inline-block px-5 py-2 bg-slate-900/70 backdrop-blur-md rounded-full border shadow-lg" style={{ borderColor: 'color-mix(in srgb, var(--primary) 30%, transparent)' }}>
             <p className="text-slate-400 text-xs font-medium tracking-wide">
               Challenge of the Day • {dailyChallenge?.date || 'Loading...'}

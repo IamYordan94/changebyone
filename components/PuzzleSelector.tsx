@@ -23,7 +23,7 @@ export default function PuzzleSelector({ puzzles, activeLength, onSelect }: Puzz
   };
 
   const getStatusStyle = (status: PuzzleGameState['status'], isActive: boolean) => {
-    const base = 'px-4 py-3 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold text-sm';
+    const base = 'px-3 py-2 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 active:scale-95 font-semibold text-sm';
     
     if (isActive) {
       return `${base} border-2 ring-2 scale-105 shadow-lg glow-blue`;

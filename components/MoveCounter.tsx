@@ -17,12 +17,12 @@ export default function MoveCounter({ moves, maxMoves }: MoveCounterProps) {
   };
 
   return (
-    <div className="text-center space-y-3 min-w-[200px]">
-      <div className="flex justify-between items-center text-sm mb-3">
+    <div className="text-center space-y-2 min-w-[160px]">
+      <div className="flex justify-between items-center text-xs mb-2">
         <span className="text-slate-400 font-semibold uppercase tracking-wide">Moves</span>
-        <span className="text-white font-black text-lg">{moves} / {maxMoves}</span>
+        <span className="text-white font-black text-base">{moves} / {maxMoves}</span>
       </div>
-      <div className="relative w-full h-4 glass rounded-full overflow-hidden border border-slate-700/50">
+      <div className="relative w-full h-3 glass rounded-full overflow-hidden border border-slate-700/50">
         <div
           className={`absolute top-0 left-0 h-full bg-gradient-to-r ${getGradient()} transition-all duration-700 rounded-full shadow-lg`}
           style={{ width: `${percentage}%` }}
@@ -30,7 +30,7 @@ export default function MoveCounter({ moves, maxMoves }: MoveCounterProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
         </div>
       </div>
-      <p className="text-xs text-slate-500 font-medium">{remaining} moves remaining</p>
+      <p className="text-[10px] text-slate-500 font-medium">{remaining} moves remaining</p>
     </div>
   );
 }
