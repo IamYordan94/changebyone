@@ -231,17 +231,29 @@ export function submitWordToPuzzle(
     // Check win condition
     const won = checkWinCondition(wordLower, puzzleState.end_word);
 
-    // Check lose condition (out of moves)
-    const lost = !won && newMoves >= puzzleState.maxMoves;
+    // Check if we've reached max moves (auto-reset instead of losing)
+    const shouldReset = !won && newMoves >= puzzleState.maxMoves;
 
-    updatedPuzzles[puzzleIndex] = {
-      ...puzzleState,
-      currentWord: wordLower,
-      wordChain: newChain,
-      moves: newMoves,
-      status: won ? 'won' : lost ? 'lost' : 'playing',
-      errors: [], // Clear errors on successful move
-    };
+    if (shouldReset) {
+      // Auto-reset: go back to start word
+      updatedPuzzles[puzzleIndex] = {
+        ...puzzleState,
+        currentWord: puzzleState.start_word,
+        wordChain: [puzzleState.start_word],
+        moves: 0,
+        status: 'playing',
+        errors: ['Puzzle auto-reset after 10 moves. Try a different path!'],
+      };
+    } else {
+      updatedPuzzles[puzzleIndex] = {
+        ...puzzleState,
+        currentWord: wordLower,
+        wordChain: newChain,
+        moves: newMoves,
+        status: won ? 'won' : 'playing',
+        errors: [], // Clear errors on successful move
+      };
+    }
   }
 
   // Calculate overall progress

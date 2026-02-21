@@ -30,7 +30,7 @@ export default function MoveCounter({ moves, maxMoves }: MoveCounterProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
         </div>
       </div>
-      <p className="text-[10px] text-slate-500 font-medium">{remaining} moves remaining</p>
+      <p className="text-[10px] text-slate-500 font-medium">{remaining} moves until reset</p>
     </div>
   );
 }

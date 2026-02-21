@@ -110,7 +110,7 @@ export default function GameBoard() {
     );
   }
 
-  const isGameOver = activePuzzle.status === 'won' || activePuzzle.status === 'lost';
+  const isGameOver = activePuzzle.status === 'won';
   const completedCount = dailyGameState.puzzles.filter(p => p.status === 'won').length;
 
   const handleSubmitWord = (word: string) => {
@@ -143,7 +143,6 @@ export default function GameBoard() {
   // Mascot state
   const getMascotState = (): 'idle' | 'success' | 'thinking' | 'error' => {
     if (activePuzzle.status === 'won') return 'success';
-    if (activePuzzle.status === 'lost') return 'error';
     if (activePuzzle.status === 'playing' && activePuzzle.moves > 0) return 'thinking';
     return 'idle';
   };
@@ -305,12 +304,6 @@ export default function GameBoard() {
             />
           )}
 
-          {activePuzzle.status === 'lost' && (
-            <FeedbackMessage
-              type="error"
-              message="Out of moves! Better luck tomorrow."
-            />
-          )}
 
           {/* Bottom Controls - Moves, Hint, Reset */}
           <div className="flex items-center justify-between flex-wrap gap-2 pt-2 border-t border-slate-700/50">
@@ -324,7 +317,7 @@ export default function GameBoard() {
                   wordChain: activePuzzle.wordChain,
                   moves: activePuzzle.moves,
                   maxMoves: activePuzzle.maxMoves,
-                  status: activePuzzle.status === 'won' ? 'won' : activePuzzle.status === 'lost' ? 'lost' : 'playing',
+                  status: activePuzzle.status === 'won' ? 'won' : 'playing',
                   difficulty: 'medium',
                   dailyChallengeDate: dailyGameState.date,
                   errors: activePuzzle.errors,
